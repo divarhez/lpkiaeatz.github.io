@@ -11,7 +11,7 @@ class MenuController extends Controller
     public function index()
     {
         $menus = Menu::all();
-        $tenants = Tenant::all();  // Mengambil semua tenant
+        $tenants = Tenant::all();
         return view('menu', compact('menus', 'tenants'));
     }
 

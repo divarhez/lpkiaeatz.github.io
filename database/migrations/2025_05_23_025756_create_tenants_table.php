@@ -9,7 +9,7 @@ class CreateTenantsTable extends Migration
     public function up()
     {
         Schema::create('tenants', function (Blueprint $table) {
-            $table->id()0;
+            $table->id();
             $table->string('name');
             $table->string('logo')->nullable();
             $table->text('description')->nullable();

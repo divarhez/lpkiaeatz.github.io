@@ -103,9 +103,9 @@
     </section>
 
     {{-- Section Tenant --}}
+    {{--
     <section id="tenant" class="mb-20">
       <h2 class="text-4xl font-bold text-center text-blue-800 mb-12 drop-shadow">Daftar Tenant</h2>
-
       <div class="grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         @foreach($tenants as $tenant)
         <div class="bg-white rounded-2xl shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center p-6 border border-yellow-100 group">
@@ -116,6 +116,7 @@
         @endforeach
       </div>
     </section>
+    --}}
 
   </main>
 
