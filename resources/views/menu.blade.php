@@ -102,22 +102,6 @@
       </div>
     </section>
 
-    {{-- Section Tenant --}}
-    {{--
-    <section id="tenant" class="mb-20">
-      <h2 class="text-4xl font-bold text-center text-blue-800 mb-12 drop-shadow">Daftar Tenant</h2>
-      <div class="grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-        @foreach($tenants as $tenant)
-        <div class="bg-white rounded-2xl shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center p-6 border border-yellow-100 group">
-          <img src="{{ $tenant->logo }}" alt="{{ $tenant->name }}" class="w-24 h-24 object-contain mb-4 rounded-full border-4 border-blue-100 group-hover:border-yellow-300 transition" loading="lazy" />
-          <h3 class="text-xl font-bold text-blue-900 mb-2">{{ $tenant->name }}</h3>
-          <p class="text-gray-600 text-sm line-clamp-3">{{ $tenant->description }}</p>
-        </div>
-        @endforeach
-      </div>
-    </section>
-    --}}
-
   </main>
 
   <footer class="bg-gradient-to-r from-blue-700 via-blue-600 to-blue-500 text-center py-8 text-white font-medium border-t border-blue-200 mt-10">
