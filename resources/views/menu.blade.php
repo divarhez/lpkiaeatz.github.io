@@ -31,7 +31,10 @@
       </nav>
     </div>
   </header>
-
+<form action="{{ route('menu.search') }}" method="GET" class="max-w-md mx-auto mb-6">
+    <input type="text" name="keyword" placeholder="Cari menu..." value="{{ request('keyword') }}"
+        class="w-full border rounded p-2" />
+</form>
   <section class="bg-white py-20">
     <div class="container mx-auto max-w-4xl text-center px-6">
       <h1 class="text-5xl font-extrabold text-gray-900 mb-4">Selamat Datang di LPKIA Eatz</h1>

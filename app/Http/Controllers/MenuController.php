@@ -85,4 +85,17 @@ class MenuController extends Controller
 
         return redirect()->route('menu.index')->with('success', 'Terima kasih! Pesanan anda berhasil diproses.');
     }
+public function search(Request $request)
+{
+    $keyword = $request->input('keyword');
+
+    $menus = Menu::query()
+        ->where('name', 'LIKE', "%{$keyword}%")
+        ->orWhere('description', 'LIKE', "%{$keyword}%")
+        ->get();
+
+    return view('menu', compact('menus'));
+}
+
+
 }
