@@ -9,7 +9,7 @@ class CreateTenantsTable extends Migration
     public function up()
     {
         Schema::create('tenants', function (Blueprint $table) {
-            $table->id();
+            $table->id()0;
             $table->string('name');
             $table->string('logo')->nullable();
             $table->text('description')->nullable();
@@ -22,4 +22,4 @@ class CreateTenantsTable extends Migration
         Schema::dropIfExists('tenants');
     }
 }
-
+// php artisan make:migration create_tenants_table --create=tenants --table=tenants

@@ -76,7 +76,7 @@
 
     {{-- Section Tenant --}}
     <section id="tenant" class="mb-20">
-      <h2 class="text-4xl font-semibold text-center text-gray-900 mb-12">Daftar Tenant Kami</h2>
+      <h2 class="text-4xl font-semibold text-center text-gray-900 mb-12">Daftar Tenant</h2>
 
       <div class="grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         {{-- Contoh tenant hardcoded. Kamu bisa ganti dengan data dinamis dari controller --}}
