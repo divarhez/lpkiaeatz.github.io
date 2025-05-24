@@ -2,20 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Menu;
-use App\Models\Tenant; // Pastikan untuk mengimpor model Tenant
+use App\Services\MenuService;
+use App\Http\Requests\MenuRequest;
+use App\Http\Resources\MenuResource;
 use Illuminate\Http\Request;
+use App\Models\Menu;
 
 class MenuController extends Controller
 {
-    public function index()
+    protected $menuService;
+
+    public function __construct(MenuService $menuService)
     {
-        $menus = Menu::all();
-        $tenants = Tenant::all();
-        return view('menu', compact('menus', 'tenants'));
+        $this->menuService = $menuService;
     }
 
-    public function addToCart($id)
+    public function index()
+    {
+        try {
+            // Jika Anda menggunakan repository/service, pastikan dependency-nya benar.
+            // Jika ingin sederhana, langsung ambil dari model:
+            $menus = Menu::all();
+            return view('menu', [
+                'menus' => $menus,
+                'title' => 'Menu List'
+            ]);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error fetching menus: ' . $e->getMessage());
+        }
+    }
+
+    public function addToCart(Request $request, $id)
     {
         $menu = Menu::findOrFail($id);
         $cart = session()->get('cart', []);

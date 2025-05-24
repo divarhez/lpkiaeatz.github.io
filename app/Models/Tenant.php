@@ -10,4 +10,9 @@ class Tenant extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'logo', 'description'];
+
+    public function menus()
+    {
+        return $this->hasMany(Menu::class);
+    }
 }
