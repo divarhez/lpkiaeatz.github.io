@@ -36,3 +36,9 @@ Route::middleware(['auth', 'petugas'])->prefix('stok-makanan')->name('stok-makan
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/tenant/{id}', [TenantController::class, 'show'])->name('tenant.show');
 Route::get('/tenants', [TenantController::class, 'index'])->name('tenant.index');
+
+// Route untuk menampilkan form tambah menu (khusus petugas)
+Route::middleware(['auth', 'petugas'])->group(function () {
+    Route::get('/menu/create', [MenuController::class, 'create'])->name('menu.create');
+    Route::post('/menu', [MenuController::class, 'store'])->name('menu.store');
+});

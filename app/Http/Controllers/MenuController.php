@@ -114,5 +114,21 @@ public function search(Request $request)
     return view('menu', compact('menus'));
 }
 
+    public function create()
+    {
+        return view('menu_create');
+    }
 
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric',
+            'image' => 'required|string',
+        ]);
+        \App\Models\Menu::create($validated);
+        return redirect()->route('menu.index')->with('success', 'Menu berhasil ditambahkan!');
+    }
 }
