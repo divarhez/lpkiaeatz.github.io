@@ -42,3 +42,9 @@ Route::middleware(['auth', 'petugas'])->group(function () {
     Route::get('/menu/create', [MenuController::class, 'create'])->name('menu.create');
     Route::post('/menu', [MenuController::class, 'store'])->name('menu.store');
 });
+
+// Route untuk halaman profil user
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
+    Route::post('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+});

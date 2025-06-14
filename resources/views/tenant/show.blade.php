@@ -14,15 +14,15 @@
     <h2 class="text-2xl font-bold text-[#FF914D] mb-6">Menu di {{ $tenant->name }}</h2>
     <div class="grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         @forelse($tenant->menus as $menu)
-            <div class="bg-white rounded-2xl shadow-xl p-6 flex flex-col border border-[#FFD6A5]">
-                <img src="{{ $menu->image }}" alt="{{ $menu->name }}" class="w-full h-40 object-cover rounded-xl mb-3">
+            <div class="bg-white rounded-2xl shadow-xl p-6 flex flex-col border border-[#FFD6A5] hover:shadow-amber-200 hover:-translate-y-2 hover:scale-105 transition-all duration-300 group">
+                <img src="{{ $menu->image }}" alt="{{ $menu->name }}" class="w-full h-40 object-cover rounded-xl mb-3 group-hover:scale-105 transition-transform duration-300">
                 <h3 class="text-lg font-bold text-[#FF914D]">{{ $menu->name }}</h3>
                 <p class="text-gray-600 mb-2">{{ $menu->description }}</p>
                 <div class="mt-auto flex justify-between items-center">
                     <span class="text-lg font-semibold text-[#FF5E13]">Rp{{ number_format($menu->price,0,',','.') }}</span>
-                    <form action="{{ route('cart.add', $menu->id) }}" method="POST">
+                    <form action="{{ route('cart.add', $menu->id) }}" method="POST" class="add-to-cart-form">
                         @csrf
-                        <button type="submit" class="bg-gradient-to-r from-[#FF914D] to-[#FF5E13] hover:from-[#FF5E13] hover:to-[#FF914D] text-white px-4 py-1.5 rounded-full font-semibold">Tambah</button>
+                        <button type="submit" class="bg-gradient-to-r from-[#FF914D] to-[#FF5E13] hover:from-[#FF5E13] hover:to-[#FF914D] text-white px-4 py-1.5 rounded-full font-semibold transition-all duration-200">Tambah</button>
                     </form>
                 </div>
             </div>

@@ -75,12 +75,20 @@
     @endif
 
     <form action="{{ route('menu.search') }}" method="GET" class="max-w-lg mx-auto mb-10">
-      <div class="flex rounded-lg shadow overflow-hidden border border-[#FF914D]/30 bg-white">
+      <div class="flex rounded-lg shadow overflow-hidden border border-[#FF914D]/30 bg-white mb-4">
         <input type="text" name="keyword" placeholder="Cari menu favoritmu..." value="{{ request('keyword') }}"
           class="w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#FF914D] transition" />
         <button type="submit" class="bg-[#FF914D] hover:bg-[#FF5E13] text-white px-5 py-2 font-semibold transition">
           <i data-feather="search" class="w-5 h-5"></i>
         </button>
+      </div>
+      <div class="flex gap-3 justify-center mb-6">
+        <select name="category" onchange="this.form.submit()" class="border rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#FF914D]">
+          <option value="">Semua Kategori</option>
+          @foreach($categories as $cat)
+            <option value="{{ $cat }}" {{ request('category') == $cat ? 'selected' : '' }}>{{ $cat }}</option>
+          @endforeach
+        </select>
       </div>
     </form>
 
@@ -95,7 +103,7 @@
       @endauth
       <div class="grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         @foreach($menus as $menu)
-        <article class="relative bg-white rounded-2xl shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 p-6 flex flex-col border border-[#FFD6A5] group">
+        <article class="relative bg-white rounded-2xl shadow-xl hover:shadow-2xl hover:-translate-y-1 hover:scale-105 transition-all duration-300 p-6 flex flex-col border border-[#FFD6A5] group">
           @if(isset($menu->is_best_seller) && $menu->is_best_seller)
             <span class="absolute top-4 left-4 bg-yellow-400 text-white text-xs font-bold px-3 py-1 rounded-full shadow animate-bounce">Best Seller</span>
           @endif
@@ -107,7 +115,7 @@
             @if(isset($menu->promo) && $menu->promo)
               <span class="ml-2 bg-pink-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">Promo</span>
             @endif
-            <form action="{{ route('cart.add', $menu->id) }}" method="POST" class="shrink-0">
+            <form action="{{ route('cart.add', $menu->id) }}" method="POST" class="add-to-cart-form shrink-0">
                 @csrf
                 <button type="submit" class="inline-flex items-center gap-2 bg-gradient-to-r from-[#FF914D] to-[#FF5E13] hover:from-[#FF5E13] hover:to-[#FF914D] text-white font-semibold rounded-full px-4 py-1.5 shadow transition-all duration-200">
                   <i data-feather="shopping-cart" class="w-4 h-4"></i> Tambah
@@ -142,7 +150,15 @@
           <div>
             <h3 class="text-xl font-bold text-[#FF914D] mb-1">Diskon 20% untuk Menu Spesial!</h3>
             <p class="text-gray-700 text-sm mb-1">Dapatkan diskon spesial untuk menu tertentu selama bulan ini. Jangan lewatkan!</p>
-            <span class="inline-block bg-[#FF914D] text-white text-xs font-bold px-2 py-1 rounded-full">Berlaku s/d 31 Mei 2025</span>
+            <span class="inline-block bg-[#FF914D] text-white text-xs font-bold px-2 py-1 rounded-full mb-2">Berlaku s/d 31 Mei 2025</span>
+            @auth
+              <form action="#" method="POST" onsubmit="event.preventDefault(); alert('Promo berhasil digunakan! (simulasi)');">
+                @csrf
+                <button type="submit" class="mt-2 bg-gradient-to-r from-[#FF914D] to-[#FF5E13] hover:from-[#FF5E13] hover:to-[#FF914D] text-white font-bold px-6 py-2 rounded-full shadow transition">Gunakan Promo</button>
+              </form>
+            @else
+              <a href="{{ route('login') }}" onclick="alert('Silakan login/daftar untuk menggunakan promo!')" class="mt-2 bg-gray-400 text-white font-bold px-6 py-2 rounded-full shadow cursor-not-allowed inline-block">Gunakan Promo</a>
+            @endauth
           </div>
         </div>
         <div class="bg-gradient-to-r from-[#FFF6E9] to-[#FFE0B2] rounded-2xl shadow-lg p-8 flex items-center gap-6 border border-[#FFD6A5]">

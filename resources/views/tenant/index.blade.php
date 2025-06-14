@@ -13,9 +13,9 @@
         </div>
         <div class="grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             @forelse($tenants as $tenant)
-                <a href="{{ route('tenant.show', $tenant->id) }}" class="group block bg-white rounded-3xl shadow-2xl p-8 border border-[#FFD6A5] hover:shadow-amber-200 hover:-translate-y-2 transition-all duration-300">
+                <a href="{{ route('tenant.show', $tenant->id) }}" class="group block bg-white rounded-3xl shadow-2xl p-8 border border-[#FFD6A5] hover:shadow-amber-200 hover:-translate-y-2 hover:scale-105 transition-all duration-300 cursor-pointer">
                     <div class="flex flex-col items-center">
-                        <div class="w-24 h-24 rounded-full bg-orange-50 flex items-center justify-center mb-4 overflow-hidden border-4 border-[#FFD6A5]">
+                        <div class="w-24 h-24 rounded-full bg-orange-50 flex items-center justify-center mb-4 overflow-hidden border-4 border-[#FFD6A5] group-hover:scale-110 transition-transform duration-300">
                             @if($tenant->logo)
                                 <img src="{{ asset('foto/' . $tenant->logo) }}" alt="Logo {{ $tenant->name }}" class="object-cover w-20 h-20 rounded-full">
                             @else

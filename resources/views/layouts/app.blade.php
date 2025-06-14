@@ -46,6 +46,17 @@
                             <i data-feather="shopping-cart" class="w-5 h-5"></i> Keranjang
                         </a>
                     </li>
+                    <li>
+                        @auth
+                            <a href="{{ route('profile.show') }}" class="hover:text-blue-500 transition flex items-center gap-1">
+                                <i data-feather="user" class="w-5 h-5"></i> Profil
+                            </a>
+                        @else
+                            <a href="{{ route('login') }}" class="hover:text-blue-500 transition flex items-center gap-1">
+                                <i data-feather="user" class="w-5 h-5"></i> Profil
+                            </a>
+                        @endauth
+                    </li>
                     @auth
                         <li>
                             <form action="{{ route('logout') }}" method="POST" class="inline">
@@ -68,6 +79,47 @@
     <footer class="bg-white/90 border-t border-[#FFD6A5] text-[#FF914D] p-4 text-center mt-10 shadow-inner">
         &copy; {{ date('Y') }} <span class="font-bold">LPKIA Eatz</span>. All Rights Reserved.
     </footer>
+    <div id="toast" class="fixed top-6 right-6 z-50 hidden bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg font-semibold text-lg animate__animated"></div>
+    <script>
+    // AJAX add to cart
+    function showToast(msg, color = 'bg-green-500') {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.className = `fixed top-6 right-6 z-50 ${color} text-white px-6 py-3 rounded-lg shadow-lg font-semibold text-lg animate__animated animate__fadeInDown`;
+        toast.style.display = 'block';
+        setTimeout(() => {
+            toast.classList.remove('animate__fadeInDown');
+            toast.classList.add('animate__fadeOutUp');
+            setTimeout(() => { toast.style.display = 'none'; toast.className = ''; }, 900);
+        }, 1800);
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.add-to-cart-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const action = this.action;
+                const formData = new FormData(this);
+                fetch(action, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.success) {
+                        showToast(data.success, 'bg-green-500');
+                    } else if(data.error) {
+                        showToast(data.error, 'bg-red-500');
+                    }
+                })
+                .catch(() => showToast('Gagal menambah ke keranjang', 'bg-red-500'));
+            });
+        });
+    });
+    </script>
     <script>feather.replace()</script>
 </body>
 </html>
