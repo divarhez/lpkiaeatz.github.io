@@ -11,7 +11,14 @@
             <p class="text-gray-600 text-lg">{{ $tenant->description }}</p>
         </div>
     </div>
-    <h2 class="text-2xl font-bold text-[#FF914D] mb-6">Menu di {{ $tenant->name }}</h2>
+    <h2 class="text-2xl font-bold text-[#FF914D] mb-6 flex items-center justify-between">
+        Menu di {{ $tenant->name }}
+        @auth
+            @if(auth()->user()->role === 'petugas')
+                <a href="{{ route('menu.create', ['tenant_id' => $tenant->id]) }}" class="inline-block bg-[#FF914D] hover:bg-[#FF5E13] text-white font-bold px-6 py-2 rounded-full shadow transition ml-4">+ Tambah Menu</a>
+            @endif
+        @endauth
+    </h2>
     <div class="grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         @forelse($tenant->menus as $menu)
             <div class="bg-white rounded-2xl shadow-xl p-6 flex flex-col border border-[#FFD6A5] hover:shadow-amber-200 hover:-translate-y-2 hover:scale-105 transition-all duration-300 group">

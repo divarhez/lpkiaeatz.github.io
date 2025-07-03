@@ -12,7 +12,7 @@
             <div class="text-4xl mb-2">🏪</div>
             <div class="font-bold text-lg text-[#FF914D]">Manajemen Tenant</div>
         </a>
-        <a href="{{ route('menu.index') }}" class="block bg-white rounded-xl shadow p-8 border border-[#FFD6A5] hover:shadow-amber-200 hover:-translate-y-2 hover:scale-105 transition-all duration-300 text-center">
+        <a href="{{ route('admin.menu.management') }}" class="block bg-white rounded-xl shadow p-8 border border-[#FFD6A5] hover:shadow-amber-200 hover:-translate-y-2 hover:scale-105 transition-all duration-300 text-center">
             <div class="text-4xl mb-2">🍔</div>
             <div class="font-bold text-lg text-[#FF914D]">Manajemen Menu</div>
         </a>

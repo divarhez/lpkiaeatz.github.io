@@ -3,33 +3,61 @@
 @section('content')
 <div class="container mx-auto px-6 py-12 flex-grow max-w-xl">
     <div class="bg-white/90 rounded-xl shadow-lg border border-orange-100 p-8">
-        <h2 class="text-3xl font-extrabold text-orange-700 mb-6 drop-shadow">Tambah Menu Baru</h2>
-        <form action="{{ route('menu.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+        <h2 class="text-3xl font-extrabold text-orange-700 mb-6 drop-shadow">
+            {{ isset($menu) ? 'Edit Menu' : 'Tambah Menu Baru' }}
+        </h2>
+        @if ($errors->any())
+            <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+                <ul class="list-disc pl-5">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        <form method="POST" action="{{ isset($menu) ? route('admin.menu.update', $menu->id) : route('menu.store') }}" enctype="multipart/form-data">
             @csrf
-            <div>
-                <label class="block mb-1 font-semibold text-orange-700" for="name">Nama Menu</label>
-                <input type="text" name="name" id="name" class="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-orange-300" required>
+            @if(isset($menu))
+                <!-- Untuk update, pakai POST ke route update -->
+            @endif
+            <div class="mb-4">
+                <label class="block text-[#FF914D] font-semibold mb-1">Tenant</label>
+                <select name="tenant_id" class="w-full px-4 py-2 border rounded-lg" required>
+                    <option value="">-- Pilih Tenant --</option>
+                    @foreach($tenants as $tenant)
+                        <option value="{{ $tenant->id }}" {{ (old('tenant_id', $selectedTenant ?? ($menu->tenant_id ?? null)) == $tenant->id) ? 'selected' : '' }}>{{ $tenant->name }}</option>
+                    @endforeach
+                </select>
             </div>
-            <div>
-                <label class="block mb-1 font-semibold text-orange-700" for="category">Kategori</label>
-                <input type="text" name="category" id="category" class="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-orange-300" required>
+            <div class="mb-4">
+                <label class="block text-[#FF914D] font-semibold mb-1">Nama Menu</label>
+                <input type="text" name="name" class="w-full px-4 py-2 border rounded-lg" required value="{{ old('name', $menu->name ?? '') }}">
             </div>
-            <div>
-                <label class="block mb-1 font-semibold text-orange-700" for="description">Deskripsi</label>
-                <textarea name="description" id="description" class="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-orange-300" required></textarea>
+            <div class="mb-4">
+                <label class="block text-[#FF914D] font-semibold mb-1">Deskripsi</label>
+                <textarea name="description" class="w-full px-4 py-2 border rounded-lg" required>{{ old('description', $menu->description ?? '') }}</textarea>
             </div>
-            <div>
-                <label class="block mb-1 font-semibold text-orange-700" for="price">Harga</label>
-                <input type="number" name="price" id="price" class="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-orange-300" required>
+            <div class="mb-4">
+                <label class="block text-[#FF914D] font-semibold mb-1">Harga</label>
+                <input type="number" name="price" class="w-full px-4 py-2 border rounded-lg" required value="{{ old('price', $menu->price ?? '') }}">
             </div>
-            <div>
-                <label class="block mb-1 font-semibold text-orange-700" for="image">Gambar Menu (URL)</label>
-                <input type="text" name="image" id="image" class="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-orange-300" required>
+            <div class="mb-4">
+                <label class="block text-[#FF914D] font-semibold mb-1">Gambar</label>
+                <input type="file" name="image" class="w-full" {{ isset($menu) ? '' : 'required' }}>
             </div>
-            <div class="flex gap-4 mt-6">
-                <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white font-bold px-6 py-2 rounded-full shadow">Simpan</button>
-                <a href="{{ route('menu.index') }}" class="text-orange-700 hover:underline font-semibold py-2">Batal</a>
+            <div class="mb-4">
+                <label class="block text-[#FF914D] font-semibold mb-1">Kategori</label>
+                <select name="category" class="w-full px-4 py-2 border rounded-lg" required>
+                    <option value="">-- Pilih Kategori --</option>
+                    <option value="Makanan" {{ old('category', $menu->category ?? '') == 'Makanan' ? 'selected' : '' }}>Makanan</option>
+                    <option value="Minuman" {{ old('category', $menu->category ?? '') == 'Minuman' ? 'selected' : '' }}>Minuman</option>
+                    <option value="Snack" {{ old('category', $menu->category ?? '') == 'Snack' ? 'selected' : '' }}>Snack</option>
+                    <option value="Lainnya" {{ old('category', $menu->category ?? '') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
+                </select>
             </div>
+            <button type="submit" class="bg-[#FF914D] hover:bg-[#FF5E13] text-white px-6 py-2 rounded-full font-bold shadow">
+                {{ isset($menu) ? 'Update' : 'Simpan' }}
+            </button>
         </form>
     </div>
 </div>

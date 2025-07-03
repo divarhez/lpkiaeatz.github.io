@@ -130,17 +130,17 @@
     </script>
     <script>feather.replace()</script>
     @auth
-        @if(auth()->user()->role === 'petugas')
-            <script>
-                // Sembunyikan header, footer, dan menu jika di dashboard admin
-                if (window.location.pathname === '/admin/dashboard') {
-                    document.addEventListener('DOMContentLoaded', function() {
-                        document.querySelector('header').style.display = 'none';
-                        document.querySelector('footer').style.display = 'none';
-                    });
-                }
-            </script>
+        @if(auth()->user()->role === 'petugas' && request()->routeIs('admin.dashboard'))
+            <style>
+                header, footer, .flex.space-x-6, .flex.items-center.gap-2, .hover\:text-amber-500, .hover\:text-[#FF5E13] { display: none !important; }
+                main.flex-grow { margin: 0 auto; }
+            </style>
         @endif
     @endauth
+    @if(session('error'))
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg shadow mb-4 text-center max-w-xl mx-auto mt-6">
+            {{ session('error') }}
+        </div>
+    @endif
 </body>
 </html>

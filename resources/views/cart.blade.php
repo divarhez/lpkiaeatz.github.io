@@ -81,8 +81,15 @@
           </tbody>
         </table>
       </div>
+      <div class="mb-6">
+        <label class="block text-[#FF914D] font-semibold mb-2">Metode Pembayaran</label>
+        <select name="payment_method" class="w-full px-4 py-2 border rounded-lg" required>
+          <option value="cash">Cash (Tunai)</option>
+          <!-- <option value="bank">Transfer Bank</option> -->
+        </select>
+      </div>
       <div class="text-right mt-8">
-        <x-button class="w-full">Checkout</x-button>
+        <x-button class="w-full" type="submit">Checkout</x-button>
       </div>
     </form>
     @else

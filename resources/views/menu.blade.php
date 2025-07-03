@@ -90,53 +90,23 @@
       </div>
     </form>
 
-    <section id="menu" class="mb-16">
+    <section id="menu-favorit" class="mb-16">
       <h2 class="text-4xl font-bold text-center text-[#FF914D] mb-10 drop-shadow">Menu Favorit</h2>
-      @auth
-        @if(auth()->user()->role === 'petugas')
-          <div class="mb-6 text-right">
-            <a href="{{ route('menu.create') }}" class="inline-block bg-[#FF914D] hover:bg-[#FF5E13] text-white font-bold px-6 py-2 rounded-full shadow transition">+ Tambah Menu</a>
-          </div>
-        @endif
-      @endauth
       <div class="grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-        @foreach($menus as $menu)
+        @forelse($favoriteMenus as $menu)
         <article class="relative bg-white rounded-2xl shadow-xl hover:shadow-2xl hover:-translate-y-1 hover:scale-105 transition-all duration-300 p-6 flex flex-col border border-[#FFD6A5] group">
-          @if(isset($menu->is_best_seller) && $menu->is_best_seller)
-            <span class="absolute top-4 left-4 bg-yellow-400 text-white text-xs font-bold px-3 py-1 rounded-full shadow animate-bounce">Best Seller</span>
-          @endif
-          <img src="{{ $menu->image }}" alt="Gambar {{ $menu->name }}" loading="lazy" class="rounded-xl h-40 w-full object-cover mb-4 group-hover:scale-105 transition-transform duration-300" />
+          <span class="absolute top-4 left-4 bg-yellow-400 text-white text-xs font-bold px-3 py-1 rounded-full shadow animate-bounce">Best Seller</span>
+          <img src="{{ asset('storage/' . $menu->image) }}" alt="Gambar {{ $menu->name }}" loading="lazy" class="rounded-xl h-40 w-full object-cover mb-4 group-hover:scale-105 transition-transform duration-300" />
           <h3 class="text-lg font-bold text-[#FF914D] mb-1">{{ $menu->name }}</h3>
           <p class="text-gray-600 text-sm italic mb-3 line-clamp-3">{{ $menu->description }}</p>
           <div class="mt-auto flex items-center justify-between">
             <span class="text-base font-bold text-[#FF5E13] drop-shadow">Rp{{ number_format($menu->price, 0, ',', '.') }}</span>
-            @if(isset($menu->promo) && $menu->promo)
-              <span class="ml-2 bg-pink-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">Promo</span>
-            @endif
-            <form action="{{ route('cart.add', $menu->id) }}" method="POST" class="add-to-cart-form shrink-0" aria-label="Tambah {{ $menu->name }} ke keranjang">
-                @csrf
-                <button type="submit" class="inline-flex items-center gap-2 bg-gradient-to-r from-[#FF914D] to-[#FF5E13] hover:from-[#FF5E13] hover:to-[#FF914D] text-white font-semibold rounded-full px-4 py-1.5 shadow transition-all duration-200">
-                  <i data-feather="shopping-cart" class="w-4 h-4"></i> Tambah
-                </button>
-            </form>
+            <span class="ml-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">Rating: {{ number_format($menu->avg_rating,1) }}</span>
           </div>
         </article>
-        @endforeach
-      </div>
-    </section>
-
-    <section id="tenant-list" class="mb-16">
-      <h2 class="text-3xl font-bold text-center text-[#FF914D] mb-8 drop-shadow">Daftar Tenant</h2>
-      <div class="grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-        @foreach($tenants ?? [] as $tenant)
-        <a href="{{ route('tenant.show', $tenant->id) }}" class="block bg-white rounded-2xl shadow-xl p-6 border border-[#FFD6A5] hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-          @if($tenant->logo)
-            <img src="{{ asset('foto/' . $tenant->logo) }}" alt="Logo {{ $tenant->name }}" class="w-16 h-16 rounded-full mx-auto mb-3">
-          @endif
-          <h3 class="text-lg font-bold text-[#FF914D] text-center mb-1">{{ $tenant->name }}</h3>
-          <p class="text-gray-600 text-center text-sm">{{ Str::limit($tenant->description, 60) }}</p>
-        </a>
-        @endforeach
+        @empty
+        <div class="col-span-3 text-center text-gray-500">Belum ada menu favorit.</div>
+        @endforelse
       </div>
     </section>
 

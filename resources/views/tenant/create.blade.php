@@ -3,6 +3,17 @@
 @section('content')
 <div class="container mx-auto px-6 py-12 max-w-2xl">
     <h2 class="text-3xl font-bold text-[#FF914D] mb-8 text-center">Tambah Tenant</h2>
+
+    @if ($errors->any())
+        <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+            <ul class="list-disc pl-5">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form method="POST" action="{{ route('tenant.store') }}" enctype="multipart/form-data">
         @csrf
         <div class="mb-4">

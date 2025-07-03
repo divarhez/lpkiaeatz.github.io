@@ -23,20 +23,21 @@ class MenuController extends Controller
         $category = $request->input('category');
         $keyword = $request->input('keyword');
 
-        $query = Menu::query();
-        if ($category) {
-            $query->where('category', $category);
-        }
-        if ($keyword) {
-            $query->where(function($q) use ($keyword) {
-                $q->where('name', 'LIKE', "%$keyword%")
-                  ->orWhere('description', 'LIKE', "%$keyword%") ;
-            });
-        }
-        $menus = $query->get();
+        // Query 3 menu favorit: transaksi terbanyak & rating rata-rata tertinggi
+        $favoriteMenus = \App\Models\Menu::select('menus.*')
+            ->join('transaction_items', 'menus.id', '=', 'transaction_items.menu_id')
+            ->selectRaw('menus.*, COUNT(transaction_items.id) as trx_count, AVG(transaction_items.rating) as avg_rating')
+            ->groupBy('menus.id', 'menus.name', 'menus.category', 'menus.description', 'menus.price', 'menus.image', 'menus.tenant_id', 'menus.created_at', 'menus.updated_at')
+            ->orderByDesc('trx_count')
+            ->orderByDesc('avg_rating')
+            ->take(3)
+            ->get();
+
+        // Menu biasa (hanya tampilkan jika ingin, tapi untuk permintaan ini tidak perlu dikirim ke view utama)
+        // $menus = $query->get();
         $categories = Menu::select('category')->distinct()->pluck('category');
         $tenants = Tenant::all();
-        return view('menu', compact('menus', 'categories', 'tenants'));
+        return view('menu', compact('categories', 'tenants', 'favoriteMenus'));
     }
 
     public function addToCart(Request $request, $id)
@@ -106,13 +107,18 @@ class MenuController extends Controller
             return redirect()->back()->with('error', 'Keranjang kosong, tidak bisa checkout');
         }
 
+        $validated = $request->validate([
+            'payment_method' => 'required|in:cash',
+        ]);
+
         // Simulasi menyimpan pesanan ke database (bisa dikembangkan)
-        // Simpan data pesanan, kirim email, dll
+        // Simpan data pesanan, payment_method, kirim email, dll
+        // Contoh: \App\Models\Transaction::create([...])
 
         // Kosongkan keranjang
         session()->forget('cart');
 
-        return redirect()->route('menu.index')->with('success', 'Terima kasih! Pesanan anda berhasil diproses.');
+        return redirect()->route('menu.index')->with('success', 'Pesanan dengan pembayaran tunai berhasil diproses!');
     }
 public function search(Request $request)
 {
@@ -120,9 +126,11 @@ public function search(Request $request)
     return $this->index($request);
 }
 
-    public function create()
+    public function create(Request $request)
     {
-        return view('menu_create');
+        $tenants = \App\Models\Tenant::all();
+        $selectedTenant = $request->get('tenant_id');
+        return view('menu_create', compact('tenants', 'selectedTenant'));
     }
 
     public function store(Request $request)
@@ -132,9 +140,71 @@ public function search(Request $request)
             'category' => 'required|string|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric',
-            'image' => 'required|string',
+            'tenant_id' => 'required|exists:tenants,id',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        // Handle upload gambar
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('menu_images', 'public');
+            $validated['image'] = $imagePath;
+        }
+
         \App\Models\Menu::create($validated);
         return redirect()->route('menu.index')->with('success', 'Menu berhasil ditambahkan!');
+    }
+    public function management(Request $request)
+    {
+        $tenants = \App\Models\Tenant::all();
+        $selectedTenant = null;
+        $menus = collect();
+        if ($request->tenant_id) {
+            $selectedTenant = \App\Models\Tenant::find($request->tenant_id);
+            if ($selectedTenant) {
+                $menus = $selectedTenant->menus;
+            }
+        }
+        return view('admin.menu_management', compact('tenants', 'selectedTenant', 'menus'));
+    }
+    public function edit($id)
+    {
+        $menu = \App\Models\Menu::findOrFail($id);
+        $tenants = \App\Models\Tenant::all();
+        return view('menu_create', [
+            'menu' => $menu,
+            'tenants' => $tenants,
+            'selectedTenant' => $menu->tenant_id
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $menu = \App\Models\Menu::findOrFail($id);
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric',
+            'tenant_id' => 'required|exists:tenants,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+        // Jika ada file gambar baru diupload
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('menu_images', 'public');
+            $validated['image'] = $imagePath;
+        } else {
+            // Jika tidak upload gambar baru, gunakan gambar lama
+            $validated['image'] = $menu->image;
+        }
+        $menu->update($validated);
+        return redirect()->route('admin.menu.management', ['tenant_id' => $menu->tenant_id])->with('success', 'Menu berhasil diupdate!');
+    }
+
+    public function destroy($id)
+    {
+        $menu = \App\Models\Menu::findOrFail($id);
+        $tenantId = $menu->tenant_id;
+        $menu->delete();
+        return redirect()->route('admin.menu.management', ['tenant_id' => $tenantId])->with('success', 'Menu berhasil dihapus!');
     }
 }

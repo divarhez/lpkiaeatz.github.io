@@ -15,6 +15,12 @@ Auth::routes();
 Route::get('/', [MenuController::class, 'index'])->name('menu.index');
 Route::get('/search', [MenuController::class, 'search'])->name('menu.search');
 
+// Route untuk tambah tenant (khusus petugas)
+Route::middleware(['auth', 'petugas'])->group(function () {
+    Route::get('/tenant/create', [TenantController::class, 'create'])->name('tenant.create');
+    Route::post('/tenant', [TenantController::class, 'store'])->name('tenant.store');
+});
+
 Route::prefix('cart')->group(function () {
     Route::get('/', [MenuController::class, 'showCart'])->name('cart.show');
     Route::post('/add/{id}', [MenuController::class, 'addToCart'])->name('cart.add');
@@ -44,12 +50,6 @@ Route::middleware(['auth', 'petugas'])->group(function () {
     Route::post('/menu', [MenuController::class, 'store'])->name('menu.store');
 });
 
-// Route untuk tambah tenant (khusus petugas)
-Route::middleware(['auth', 'petugas'])->group(function () {
-    Route::get('/tenant/create', [TenantController::class, 'create'])->name('tenant.create');
-    Route::post('/tenant', [TenantController::class, 'store'])->name('tenant.store');
-});
-
 // Route untuk halaman profil user
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
@@ -59,3 +59,9 @@ Route::middleware(['auth'])->group(function () {
 
 // Dashboard admin untuk petugas
 Route::middleware(['auth', 'petugas'])->get('/admin/dashboard', [\App\Http\Controllers\AdminDashboardController::class, 'index'])->name('admin.dashboard');
+
+// Route manajemen menu untuk admin/petugas
+Route::middleware(['auth', 'petugas'])->get('/admin/menu-management', [MenuController::class, 'management'])->name('admin.menu.management');
+Route::middleware(['auth', 'petugas'])->get('/admin/menu-management/edit/{id}', [MenuController::class, 'edit'])->name('admin.menu.edit');
+Route::middleware(['auth', 'petugas'])->post('/admin/menu-management/update/{id}', [MenuController::class, 'update'])->name('admin.menu.update');
+Route::middleware(['auth', 'petugas'])->post('/admin/menu-management/delete/{id}', [MenuController::class, 'destroy'])->name('admin.menu.delete');

@@ -9,9 +9,14 @@ class PetugasMiddleware
 {
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->role === 'petugas') {
-            return $next($request);
+        if (!\Illuminate\Support\Facades\Auth::check()) {
+            // Jika belum login, redirect ke login
+            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
         }
-        abort(403, 'Unauthorized');
+        if (\Illuminate\Support\Facades\Auth::user()->role !== 'petugas') {
+            // Jika bukan petugas, redirect ke home dengan pesan
+            return redirect('/')->with('error', 'Anda tidak memiliki akses ke halaman ini.');
+        }
+        return $next($request);
     }
 }
