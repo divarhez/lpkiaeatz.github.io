@@ -23,6 +23,10 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $user = auth()->user();
+        if ($user && $user->role === 'petugas') {
+            return redirect()->route('admin.dashboard');
+        }
         return view('home');
     }
 }

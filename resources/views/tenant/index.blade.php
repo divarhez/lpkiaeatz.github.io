@@ -17,9 +17,9 @@
                     <div class="flex flex-col items-center">
                         <div class="w-24 h-24 rounded-full bg-orange-50 flex items-center justify-center mb-4 overflow-hidden border-4 border-[#FFD6A5] group-hover:scale-110 transition-transform duration-300">
                             @if($tenant->logo)
-                                <img src="{{ asset('foto/' . $tenant->logo) }}" alt="Logo {{ $tenant->name }}" class="object-cover w-20 h-20 rounded-full">
+                                <img src="{{ asset('foto/' . $tenant->logo) }}" alt="Logo {{ $tenant->name }}" class="object-cover w-20 h-20 rounded-full" loading="lazy">
                             @else
-                                <img src="https://img.icons8.com/color/96/000000/food-bar.png" alt="Tenant" class="w-16 h-16">
+                                <img src="https://img.icons8.com/color/96/000000/food-bar.png" alt="Tenant Default" class="w-16 h-16" loading="lazy">
                             @endif
                         </div>
                         <h2 class="text-xl font-extrabold text-[#FF914D] text-center mb-2 group-hover:text-[#FF5E13] transition">{{ $tenant->name }}</h2>

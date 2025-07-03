@@ -84,14 +84,17 @@ class MenuController extends Controller
         if($request->quantity <= 0){
             return $this->removeFromCart($id);
         }
-
         $cart = session()->get('cart', []);
-
         if(isset($cart[$id])){
             $cart[$id]['quantity'] = $request->quantity;
             session()->put('cart', $cart);
         }
-
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => 'Keranjang berhasil diperbarui!',
+                'cart' => $cart
+            ]);
+        }
         return redirect()->back()->with('success', 'Keranjang berhasil diperbarui!');
     }
 

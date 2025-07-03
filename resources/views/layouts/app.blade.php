@@ -41,6 +41,9 @@
                     <li><a href="/tenants" class="hover:text-[#FF5E13] transition">Tenant</a></li>
                     <li><a href="{{ route('menu.index') }}#menu" class="hover:text-[#FF5E13] transition">Menu</a></li>
                     <li><a href="#promo" class="hover:text-[#FF5E13] transition">Promo</a></li>
+                    @auth
+                        <li><a href="{{ route('orders.history') }}" class="hover:text-amber-500 transition">Riwayat Pesanan</a></li>
+                    @endauth
                     <li>
                         <a href="{{ route('cart.show') }}" class="hover:text-[#FF5E13] transition flex items-center gap-1">
                             <i data-feather="shopping-cart" class="w-5 h-5"></i> Keranjang
@@ -68,6 +71,11 @@
                         <li>
                             <a href="{{ route('login') }}" class="hover:text-blue-500 transition">Login</a>
                         </li>
+                    @endauth
+                    @auth
+                        @if(auth()->user()->role === 'petugas')
+                            <li><a href="{{ route('admin.dashboard') }}" class="hover:text-[#FF5E13] transition font-bold">Dashboard Admin</a></li>
+                        @endif
                     @endauth
                 </ul>
             </nav>
@@ -121,5 +129,18 @@
     });
     </script>
     <script>feather.replace()</script>
+    @auth
+        @if(auth()->user()->role === 'petugas')
+            <script>
+                // Sembunyikan header, footer, dan menu jika di dashboard admin
+                if (window.location.pathname === '/admin/dashboard') {
+                    document.addEventListener('DOMContentLoaded', function() {
+                        document.querySelector('header').style.display = 'none';
+                        document.querySelector('footer').style.display = 'none';
+                    });
+                }
+            </script>
+        @endif
+    @endauth
 </body>
 </html>

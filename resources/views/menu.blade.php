@@ -69,9 +69,7 @@
   <main class="max-w-6xl mx-auto px-6 py-12 flex-grow">
 
     @if (session('success'))
-      <div class="mb-8 max-w-2xl mx-auto text-center bg-green-100 border border-green-400 text-green-700 rounded-md px-6 py-4 shadow">
-        {{ session('success') }}
-      </div>
+      <x-alert type="success">{{ session('success') }}</x-alert>
     @endif
 
     <form action="{{ route('menu.search') }}" method="GET" class="max-w-lg mx-auto mb-10">
@@ -107,7 +105,7 @@
           @if(isset($menu->is_best_seller) && $menu->is_best_seller)
             <span class="absolute top-4 left-4 bg-yellow-400 text-white text-xs font-bold px-3 py-1 rounded-full shadow animate-bounce">Best Seller</span>
           @endif
-          <img src="{{ $menu->image }}" alt="{{ $menu->name }}" loading="lazy" class="rounded-xl h-40 w-full object-cover mb-4 group-hover:scale-105 transition-transform duration-300" />
+          <img src="{{ $menu->image }}" alt="Gambar {{ $menu->name }}" loading="lazy" class="rounded-xl h-40 w-full object-cover mb-4 group-hover:scale-105 transition-transform duration-300" />
           <h3 class="text-lg font-bold text-[#FF914D] mb-1">{{ $menu->name }}</h3>
           <p class="text-gray-600 text-sm italic mb-3 line-clamp-3">{{ $menu->description }}</p>
           <div class="mt-auto flex items-center justify-between">
@@ -115,7 +113,7 @@
             @if(isset($menu->promo) && $menu->promo)
               <span class="ml-2 bg-pink-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">Promo</span>
             @endif
-            <form action="{{ route('cart.add', $menu->id) }}" method="POST" class="add-to-cart-form shrink-0">
+            <form action="{{ route('cart.add', $menu->id) }}" method="POST" class="add-to-cart-form shrink-0" aria-label="Tambah {{ $menu->name }} ke keranjang">
                 @csrf
                 <button type="submit" class="inline-flex items-center gap-2 bg-gradient-to-r from-[#FF914D] to-[#FF5E13] hover:from-[#FF5E13] hover:to-[#FF914D] text-white font-semibold rounded-full px-4 py-1.5 shadow transition-all duration-200">
                   <i data-feather="shopping-cart" class="w-4 h-4"></i> Tambah

@@ -6,6 +6,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\StokMakananController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TenantController;
+use App\Http\Controllers\OrderHistoryController;
 
 // Auth routes
 Auth::routes();
@@ -43,8 +44,18 @@ Route::middleware(['auth', 'petugas'])->group(function () {
     Route::post('/menu', [MenuController::class, 'store'])->name('menu.store');
 });
 
+// Route untuk tambah tenant (khusus petugas)
+Route::middleware(['auth', 'petugas'])->group(function () {
+    Route::get('/tenant/create', [TenantController::class, 'create'])->name('tenant.create');
+    Route::post('/tenant', [TenantController::class, 'store'])->name('tenant.store');
+});
+
 // Route untuk halaman profil user
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
     Route::post('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/orders/history', [OrderHistoryController::class, 'index'])->name('orders.history');
 });
+
+// Dashboard admin untuk petugas
+Route::middleware(['auth', 'petugas'])->get('/admin/dashboard', [\App\Http\Controllers\AdminDashboardController::class, 'index'])->name('admin.dashboard');

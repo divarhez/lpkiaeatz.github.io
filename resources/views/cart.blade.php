@@ -29,6 +29,9 @@
           <li><a href="/tenants" class="hover:text-amber-500 transition">Tenant</a></li>
           <li><a href="{{ route('menu.index') }}#menu" class="hover:text-amber-500 transition">Menu</a></li>
           <li><a href="#promo" class="hover:text-amber-500 transition">Promo</a></li>
+          @auth
+              <li><a href="{{ route('orders.history') }}" class="hover:text-amber-500 transition">Riwayat Pesanan</a></li>
+          @endauth
         </ul>
       </nav>
     </div>
@@ -36,14 +39,10 @@
   <main class="container mx-auto px-6 py-12 flex-grow max-w-4xl">
     <h1 class="text-4xl font-extrabold text-[#FF914D] mb-10 text-center drop-shadow">Keranjang Belanja</h1>
     @if(session('success'))
-      <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg shadow mb-4 text-center" role="alert">
-        {{ session('success') }}
-      </div>
+      <x-alert type="success">{{ session('success') }}</x-alert>
     @endif
     @if(session('error'))
-      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg shadow mb-4 text-center" role="alert">
-        {{ session('error') }}
-      </div>
+      <x-alert type="error">{{ session('error') }}</x-alert>
     @endif
     @if(count($cart) > 0)
     <form action="{{ route('checkout') }}" method="POST" id="checkout-form">
@@ -63,19 +62,19 @@
           <tbody>
             @foreach($cart as $id => $item)
             <tr class="border-b border-[#FFD6A5]">
-              <td class="py-3 px-6"><img src="{{ $item['image'] }}" alt="{{ $item['name'] }}" class="w-16 h-16 rounded-xl object-cover"></td>
+              <td class="py-3 px-6"><img src="{{ $item['image'] }}" alt="Gambar {{ $item['name'] }}" class="w-16 h-16 rounded-xl object-cover" loading="lazy"></td>
               <td class="py-3 px-6 font-semibold text-[#FF914D]">{{ $item['name'] }}</td>
               <td class="py-3 px-6 text-[#FF5E13] font-bold">Rp{{ number_format($item['price'],0,',','.') }}</td>
               <td class="py-3 px-6">
-                <form action="{{ route('cart.update', $id) }}" method="POST" class="flex items-center gap-2">
+                <form action="{{ route('cart.update', $id) }}" method="POST" class="flex items-center gap-2 update-cart-form" data-id="{{ $id }}">
                   @csrf
-                  <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" class="w-16 border rounded px-2 py-1 text-center">
-                  <button type="submit" class="bg-[#FF914D] hover:bg-[#FF5E13] text-white px-3 py-1 rounded">Update</button>
+                  <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" class="w-16 border rounded px-2 py-1 text-center quantity-input" aria-label="Jumlah {{ $item['name'] }}">
+                  <button type="submit" class="bg-[#FF914D] hover:bg-[#FF5E13] text-white px-3 py-1 rounded" aria-label="Update jumlah {{ $item['name'] }}">Update</button>
                 </form>
               </td>
               <td class="py-3 px-6 text-[#FF5E13] font-bold">Rp{{ number_format($item['price'] * $item['quantity'],0,',','.') }}</td>
               <td class="py-3 px-6">
-                <a href="{{ route('cart.remove', $id) }}" class="text-red-600 hover:underline font-bold">Hapus</a>
+                <a href="{{ route('cart.remove', $id) }}" class="text-red-600 hover:underline font-bold" aria-label="Hapus {{ $item['name'] }} dari keranjang">Hapus</a>
               </td>
             </tr>
             @endforeach
@@ -83,7 +82,7 @@
         </table>
       </div>
       <div class="text-right mt-8">
-        <button type="submit" class="bg-gradient-to-r from-[#FF914D] to-[#FF5E13] text-white font-bold px-10 py-3 rounded-full shadow-lg hover:scale-105 transition text-lg">Checkout</button>
+        <x-button class="w-full">Checkout</x-button>
       </div>
     </form>
     @else
@@ -94,5 +93,46 @@
     &copy; 2025 <span class="font-bold">LPKIA Eatz</span>
   </footer>
   <script>feather.replace()</script>
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.update-cart-form').forEach(form => {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const action = this.action;
+      const formData = new FormData(this);
+      fetch(action, {
+        method: 'POST',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if(data.success && data.cart) {
+          // Update subtotal dan total di tabel
+          const id = this.getAttribute('data-id');
+          const row = this.closest('tr');
+          row.querySelector('input[name="quantity"]').value = data.cart[id].quantity;
+          row.querySelectorAll('td')[4].textContent = 'Rp' + (data.cart[id].price * data.cart[id].quantity).toLocaleString('id-ID');
+          // Update total
+          let total = 0;
+          Object.values(data.cart).forEach(item => {
+            total += item.price * item.quantity;
+          });
+          let totalCell = document.getElementById('cart-total');
+          if (!totalCell) {
+            totalCell = document.createElement('div');
+            totalCell.id = 'cart-total';
+            document.querySelector('.text-right.mt-8').appendChild(totalCell);
+          }
+          totalCell.innerHTML = '<span class="font-bold text-lg">Total: Rp' + total.toLocaleString('id-ID') + '</span>';
+        }
+      });
+    });
+  });
+});
+</script>
 </body>
 </html>
