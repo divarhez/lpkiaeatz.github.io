@@ -48,7 +48,7 @@
     <form action="{{ route('checkout') }}" method="POST" id="checkout-form">
       @csrf
       <div class="overflow-x-auto rounded-2xl shadow-xl bg-white border border-[#FFD6A5]">
-        <table class="min-w-full divide-y divide-[#FFD6A5]">
+        <table class="min-w-full divide-y divide-[#FFD6A5] text-xs sm:text-base">
           <thead>
             <tr>
               <th class="py-3 px-6 bg-[#FF914D] text-white font-bold rounded-tl-2xl">Gambar</th>
@@ -68,7 +68,7 @@
               <td class="py-3 px-6">
                 <form action="{{ route('cart.update', $id) }}" method="POST" class="flex items-center gap-2 update-cart-form" data-id="{{ $id }}">
                   @csrf
-                  <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" class="w-16 border rounded px-2 py-1 text-center quantity-input" aria-label="Jumlah {{ $item['name'] }}">
+                  <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" class="w-12 sm:w-16 border rounded px-2 py-2 sm:py-1 text-center quantity-input text-base sm:text-lg" aria-label="Jumlah {{ $item['name'] }}">
                   <button type="submit" class="bg-[#FF914D] hover:bg-[#FF5E13] text-white px-3 py-1 rounded" aria-label="Update jumlah {{ $item['name'] }}">Update</button>
                 </form>
               </td>
@@ -89,14 +89,14 @@
         </select>
       </div>
       <div class="text-right mt-8">
-        <x-button class="w-full" type="submit">Checkout</x-button>
+        <x-button class="w-full text-base sm:text-lg py-3 sm:py-4" type="submit">Checkout</x-button>
       </div>
     </form>
     @else
       <p class="text-center text-gray-500">Keranjang belanja kosong.</p>
     @endif
   </main>
-  <footer class="bg-white/90 border-t border-orange-200 text-orange-700 p-4 text-center mt-10 shadow-inner">
+  <footer class="bg-white/90 border-t border-orange-200 text-orange-700 p-3 sm:p-4 text-center mt-6 sm:mt-10 shadow-inner">
     &copy; 2025 <span class="font-bold">LPKIA Eatz</span>
   </footer>
   <script>feather.replace()</script>

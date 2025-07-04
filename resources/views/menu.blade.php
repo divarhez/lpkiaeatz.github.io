@@ -27,13 +27,13 @@
 <body class="bg-gradient-to-br from-orange-50 via-white to-amber-100 min-h-screen flex flex-col font-sans text-gray-800">
 
   <header class="bg-white/90 shadow sticky top-0 z-50 border-b border-orange-200">
-    <div class="container mx-auto flex justify-between items-center py-4 px-6">
-      <a href="/" class="text-3xl font-extrabold text-orange-600 tracking-wide hover:scale-105 transition-transform flex items-center gap-2">
-        <img src="https://img.icons8.com/fluency/48/restaurant-table.png" class="w-10 h-10" alt="Logo" />
+    <div class="container mx-auto flex justify-between items-center py-3 sm:py-4 px-2 sm:px-6">
+      <a href="/" class="text-2xl sm:text-3xl font-extrabold text-orange-600 tracking-wide hover:scale-105 transition-transform flex items-center gap-2">
+        <img src="https://img.icons8.com/fluency/48/restaurant-table.png" class="w-8 h-8 sm:w-10 sm:h-10" alt="Logo" />
         LPKIA Eatz
       </a>
-      <nav>
-        <ul class="flex space-x-6 text-orange-700 font-semibold">
+      <nav class="overflow-x-auto max-w-[60vw] sm:max-w-none">
+        <ul class="flex space-x-4 sm:space-x-6 text-orange-700 font-semibold min-w-max">
           <li><a href="/" class="hover:text-amber-500 transition">Home</a></li>
           <li><a href="/tenants" class="hover:text-amber-500 transition">Tenant</a></li>
           <li><a href="#menu" class="hover:text-amber-500 transition">Menu</a></li>
@@ -59,14 +59,14 @@
       </nav>
     </div>
   </header>
-  <section class="relative bg-gradient-to-br from-[#FFF6E9] via-[#FFF] to-[#FFE0B2] py-16 overflow-hidden">
-    <div class="max-w-4xl mx-auto text-center px-6 relative z-10">
-      <h1 class="text-5xl md:text-6xl font-extrabold text-[#FF914D] mb-4 drop-shadow-lg leading-tight">Temukan Kuliner Favoritmu di <span class="text-[#FF5E13]">LPKIA Eatz</span></h1>
-      <p class="text-lg md:text-xl text-[#22223B] mb-8">Aneka makanan & minuman kampus, promo menarik, dan tenant pilihan. Pesan mudah, nikmati lezatnya!</p>
-      <a href="#menu" class="inline-block bg-gradient-to-r from-[#FF914D] to-[#FF5E13] text-white font-bold rounded-full px-10 py-4 shadow-lg hover:scale-105 hover:from-[#FF5E13] hover:to-[#FF914D] transition-all duration-300 text-lg">Lihat Menu</a>
+  <section class="relative bg-gradient-to-br from-[#FFF6E9] via-[#FFF] to-[#FFE0B2] py-8 sm:py-16 overflow-hidden">
+    <div class="max-w-4xl mx-auto text-center px-2 sm:px-6 relative z-10">
+      <h1 class="text-2xl sm:text-5xl md:text-6xl font-extrabold text-[#FF914D] mb-2 sm:mb-4 drop-shadow-lg leading-tight">Temukan Kuliner Favoritmu di <span class="text-[#FF5E13]">LPKIA Eatz</span></h1>
+      <p class="text-base sm:text-lg md:text-xl text-[#22223B] mb-4 sm:mb-8">Aneka makanan & minuman kampus, promo menarik, dan tenant pilihan. Pesan mudah, nikmati lezatnya!</p>
+      <a href="#menu" class="inline-block bg-gradient-to-r from-[#FF914D] to-[#FF5E13] text-white font-bold rounded-full px-6 sm:px-10 py-3 sm:py-4 shadow-lg hover:scale-105 hover:from-[#FF5E13] hover:to-[#FF914D] transition-all duration-300 text-base sm:text-lg">Lihat Menu</a>
     </div>
   </section>
-  <main class="max-w-6xl mx-auto px-6 py-12 flex-grow">
+  <main class="max-w-6xl mx-auto px-2 sm:px-6 py-6 sm:py-12 flex-grow">
 
     @if (session('success'))
       <x-alert type="success">{{ session('success') }}</x-alert>
@@ -90,17 +90,17 @@
       </div>
     </form>
 
-    <section id="menu-favorit" class="mb-16">
-      <h2 class="text-4xl font-bold text-center text-[#FF914D] mb-10 drop-shadow">Menu Favorit</h2>
-      <div class="grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+    <section id="menu-favorit" class="mb-10 sm:mb-16">
+      <h2 class="text-2xl sm:text-4xl font-bold text-center text-[#FF914D] mb-6 sm:mb-10 drop-shadow">Menu Favorit</h2>
+      <div class="grid gap-6 sm:gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         @forelse($favoriteMenus as $menu)
-        <article class="relative bg-white rounded-2xl shadow-xl hover:shadow-2xl hover:-translate-y-1 hover:scale-105 transition-all duration-300 p-6 flex flex-col border border-[#FFD6A5] group">
-          <span class="absolute top-4 left-4 bg-yellow-400 text-white text-xs font-bold px-3 py-1 rounded-full shadow animate-bounce">Best Seller</span>
-          <img src="{{ asset('storage/' . $menu->image) }}" alt="Gambar {{ $menu->name }}" loading="lazy" class="rounded-xl h-40 w-full object-cover mb-4 group-hover:scale-105 transition-transform duration-300" />
-          <h3 class="text-lg font-bold text-[#FF914D] mb-1">{{ $menu->name }}</h3>
-          <p class="text-gray-600 text-sm italic mb-3 line-clamp-3">{{ $menu->description }}</p>
+        <article class="relative bg-white rounded-2xl shadow-xl hover:shadow-2xl hover:-translate-y-1 hover:scale-105 transition-all duration-300 p-4 sm:p-6 flex flex-col border border-[#FFD6A5] group">
+          <span class="absolute top-2 left-2 sm:top-4 sm:left-4 bg-yellow-400 text-white text-xs font-bold px-2 sm:px-3 py-1 rounded-full shadow animate-bounce">Best Seller</span>
+          <img src="{{ asset('storage/' . $menu->image) }}" alt="Gambar {{ $menu->name }}" loading="lazy" class="rounded-xl h-28 sm:h-40 w-full object-cover mb-2 sm:mb-4 group-hover:scale-105 transition-transform duration-300" />
+          <h3 class="text-base sm:text-lg font-bold text-[#FF914D] mb-1">{{ $menu->name }}</h3>
+          <p class="text-gray-600 text-xs sm:text-sm italic mb-2 sm:mb-3 line-clamp-3">{{ $menu->description }}</p>
           <div class="mt-auto flex items-center justify-between">
-            <span class="text-base font-bold text-[#FF5E13] drop-shadow">Rp{{ number_format($menu->price, 0, ',', '.') }}</span>
+            <span class="text-sm sm:text-base font-bold text-[#FF5E13] drop-shadow">Rp{{ number_format($menu->price, 0, ',', '.') }}</span>
             <span class="ml-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">Rating: {{ number_format($menu->avg_rating,1) }}</span>
           </div>
         </article>
@@ -110,11 +110,11 @@
       </div>
     </section>
 
-    <section class="mb-10">
-      <h2 class="text-3xl font-bold text-center text-[#FF914D] mb-8 drop-shadow">Promo & Event Kampus</h2>
-      <div class="grid gap-8 grid-cols-1 md:grid-cols-2">
-        <div class="bg-gradient-to-r from-[#FFE0B2] to-[#FFF6E9] rounded-2xl shadow-lg p-8 flex items-center gap-6 border border-[#FFD6A5]">
-          <img src="https://img.freepik.com/free-vector/food-promotion-banner-template_23-2148986842.jpg?w=400" alt="Promo" class="w-28 h-28 rounded-xl object-cover">
+    <section class="mb-8 sm:mb-10">
+      <h2 class="text-xl sm:text-3xl font-bold text-center text-[#FF914D] mb-6 sm:mb-8 drop-shadow">Promo & Event Kampus</h2>
+      <div class="grid gap-4 sm:gap-8 grid-cols-1 md:grid-cols-2">
+        <div class="bg-gradient-to-r from-[#FFE0B2] to-[#FFF6E9] rounded-2xl shadow-lg p-4 sm:p-8 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 border border-[#FFD6A5]">
+          <img src="https://img.freepik.com/free-vector/food-promotion-banner-template_23-2148986842.jpg?w=400" alt="Promo" class="w-20 h-20 sm:w-28 sm:h-28 rounded-xl object-cover mb-2 sm:mb-0">
           <div>
             <h3 class="text-xl font-bold text-[#FF914D] mb-1">Diskon 20% untuk Menu Spesial!</h3>
             <p class="text-gray-700 text-sm mb-1">Dapatkan diskon spesial untuk menu tertentu selama bulan ini. Jangan lewatkan!</p>
@@ -129,8 +129,8 @@
             @endauth
           </div>
         </div>
-        <div class="bg-gradient-to-r from-[#FFF6E9] to-[#FFE0B2] rounded-2xl shadow-lg p-8 flex items-center gap-6 border border-[#FFD6A5]">
-          <img src="https://img.freepik.com/free-vector/food-delivery-concept-illustration_114360-2747.jpg?w=400" alt="Event" class="w-28 h-28 rounded-xl object-cover">
+        <div class="bg-gradient-to-r from-[#FFF6E9] to-[#FFE0B2] rounded-2xl shadow-lg p-4 sm:p-8 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 border border-[#FFD6A5]">
+          <img src="https://img.freepik.com/free-vector/food-delivery-concept-illustration_114360-2747.jpg?w=400" alt="Event" class="w-20 h-20 sm:w-28 sm:h-28 rounded-xl object-cover mb-2 sm:mb-0">
           <div>
             <h3 class="text-xl font-bold text-[#FF914D] mb-1">Event: Lomba Makan Cepat!</h3>
             <p class="text-gray-700 text-sm mb-1">Ikuti lomba makan cepat antar mahasiswa dan menangkan hadiah menarik!</p>
@@ -141,7 +141,7 @@
     </section>
   </main>
 
-  <footer class="bg-white/90 border-t border-orange-200 text-orange-700 p-4 text-center mt-10 shadow-inner">
+  <footer class="bg-white/90 border-t border-orange-200 text-orange-700 p-3 sm:p-4 text-center mt-6 sm:mt-10 shadow-inner">
     &copy; {{ date('Y') }} <span class="font-bold">LPKIA Eatz</span>. All Rights Reserved.
   </footer>
 

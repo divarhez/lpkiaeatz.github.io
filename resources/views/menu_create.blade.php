@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto px-6 py-12 flex-grow max-w-xl">
-    <div class="bg-white/90 rounded-xl shadow-lg border border-orange-100 p-8">
-        <h2 class="text-3xl font-extrabold text-orange-700 mb-6 drop-shadow">
+<div class="container mx-auto px-2 sm:px-6 py-6 sm:py-12 flex-grow max-w-full sm:max-w-xl">
+    <div class="bg-white/90 rounded-xl shadow-lg border border-orange-100 p-4 sm:p-8">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-orange-700 mb-4 sm:mb-6 drop-shadow">
             {{ isset($menu) ? 'Edit Menu' : 'Tambah Menu Baru' }}
         </h2>
         @if ($errors->any())
@@ -35,11 +35,11 @@
             </div>
             <div class="mb-4">
                 <label class="block text-[#FF914D] font-semibold mb-1">Deskripsi</label>
-                <textarea name="description" class="w-full px-4 py-2 border rounded-lg" required>{{ old('description', $menu->description ?? '') }}</textarea>
+                <textarea name="description" class="w-full px-4 py-2 border rounded-lg resize-none" required>{{ old('description', $menu->description ?? '') }}</textarea>
             </div>
             <div class="mb-4">
                 <label class="block text-[#FF914D] font-semibold mb-1">Harga</label>
-                <input type="number" name="price" class="w-full px-4 py-2 border rounded-lg" required value="{{ old('price', $menu->price ?? '') }}">
+                <input type="number" name="price" class="w-full px-4 py-2 border rounded-lg" required value="{{ old('price', $menu->price ?? '') }}" inputmode="numeric" autocomplete="off">
             </div>
             <div class="mb-4">
                 <label class="block text-[#FF914D] font-semibold mb-1">Gambar</label>
@@ -55,7 +55,7 @@
                     <option value="Lainnya" {{ old('category', $menu->category ?? '') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
                 </select>
             </div>
-            <button type="submit" class="bg-[#FF914D] hover:bg-[#FF5E13] text-white px-6 py-2 rounded-full font-bold shadow">
+            <button type="submit" class="w-full sm:w-auto bg-[#FF914D] hover:bg-[#FF5E13] text-white px-6 py-2 rounded-full font-bold shadow mt-2" aria-label="{{ isset($menu) ? 'Update' : 'Simpan' }}">
                 {{ isset($menu) ? 'Update' : 'Simpan' }}
             </button>
         </form>

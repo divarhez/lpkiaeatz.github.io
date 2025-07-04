@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#FFF6E9] via-[#FFF] to-[#FFE0B2] py-12">
-    <div class="w-full max-w-lg mx-auto bg-white rounded-2xl shadow-xl p-10 border border-[#FFD6A5]">
-        <h2 class="text-3xl font-extrabold text-center text-[#FF914D] mb-8">Profil Saya</h2>
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#FFF6E9] via-[#FFF] to-[#FFE0B2] py-6 sm:py-12">
+    <div class="w-full max-w-full sm:max-w-lg mx-auto bg-white rounded-2xl shadow-xl p-4 sm:p-10 border border-[#FFD6A5]">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-center text-[#FF914D] mb-6 sm:mb-8">Profil Saya</h2>
         @if(session('success'))
             <x-alert type="success">{{ session('success') }}</x-alert>
         @endif
@@ -16,7 +16,7 @@
                 </ul>
             </x-alert>
         @endif
-        <form method="POST" action="{{ route('profile.update') }}" class="space-y-6">
+        <form method="POST" action="{{ route('profile.update') }}" class="space-y-4 sm:space-y-6">
             @csrf
             <div>
                 <label for="name" class="block text-[#FF914D] font-semibold mb-1">Nama</label>

@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto px-6 py-12 max-w-3xl">
-    <h2 class="text-3xl font-bold text-[#FF914D] mb-8 text-center">Riwayat Pembelian Saya</h2>
+<div class="container mx-auto px-2 sm:px-6 py-6 sm:py-12 max-w-full sm:max-w-3xl">
+    <h2 class="text-2xl sm:text-3xl font-bold text-[#FF914D] mb-4 sm:mb-8 text-center">Riwayat Pembelian Saya</h2>
     @if($transactions->isEmpty())
         <div class="text-center text-gray-500">Belum ada riwayat pembelian.</div>
     @else
-        <div class="space-y-6">
+        <div class="space-y-4 sm:space-y-6">
             @foreach($transactions as $trx)
-                <div class="bg-white rounded-xl shadow p-6 border border-[#FFD6A5]">
-                    <div class="flex justify-between mb-2">
+                <div class="bg-white rounded-xl shadow p-4 sm:p-6 border border-[#FFD6A5]">
+                    <div class="flex flex-col sm:flex-row sm:justify-between mb-2 gap-1 sm:gap-0">
                         <span class="font-semibold text-[#FF914D]">Tanggal:</span>
                         <span>{{ $trx->created_at->format('d M Y H:i') }}</span>
                     </div>
@@ -19,7 +19,7 @@
                     </div>
                     <div>
                         <span class="font-semibold text-[#FF914D]">Item:</span>
-                        <ul class="list-disc ml-6">
+                        <ul class="list-disc ml-4 sm:ml-6 text-sm sm:text-base">
                             @foreach($trx->items as $item)
                                 <li>{{ $item->menu->name }} x{{ $item->quantity }}</li>
                             @endforeach
