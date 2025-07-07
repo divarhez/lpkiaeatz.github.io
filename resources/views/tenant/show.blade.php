@@ -22,7 +22,7 @@
     <div class="grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         @forelse($tenant->menus as $menu)
             <div class="bg-white rounded-2xl shadow-xl p-6 flex flex-col border border-[#FFD6A5] hover:shadow-amber-200 hover:-translate-y-2 hover:scale-105 transition-all duration-300 group">
-                <img src="{{ $menu->image }}" alt="Gambar {{ $menu->name }}" class="w-full h-40 object-cover rounded-xl mb-3 group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                <img src="{{ asset('storage/' . $menu->image) }}" alt="Gambar {{ $menu->name }}" class="w-full h-40 object-cover rounded-xl mb-3 group-hover:scale-105 transition-transform duration-300" loading="lazy">
                 <h3 class="text-lg font-bold text-[#FF914D]">{{ $menu->name }}</h3>
                 <p class="text-gray-600 mb-2">{{ $menu->description }}</p>
                 <div class="mt-auto flex justify-between items-center">

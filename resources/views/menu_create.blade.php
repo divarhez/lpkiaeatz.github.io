@@ -55,10 +55,29 @@
                     <option value="Lainnya" {{ old('category', $menu->category ?? '') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
                 </select>
             </div>
-            <button type="submit" class="w-full sm:w-auto bg-[#FF914D] hover:bg-[#FF5E13] text-white px-6 py-2 rounded-full font-bold shadow mt-2" aria-label="{{ isset($menu) ? 'Update' : 'Simpan' }}">
-                {{ isset($menu) ? 'Update' : 'Simpan' }}
+            <button type="submit" id="menu-form-submit" class="w-full sm:w-auto bg-[#FF914D] hover:bg-[#FF5E13] text-white px-6 py-2 rounded-full font-bold shadow mt-2 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-200" aria-label="{{ isset($menu) ? 'Update' : 'Simpan' }}">
+                <span id="menu-form-btn-text">{{ isset($menu) ? 'Update' : 'Simpan' }}</span>
+                <svg id="menu-form-spinner" class="hidden animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
             </button>
         </form>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const submitBtn = document.getElementById('menu-form-submit');
+    const btnText = document.getElementById('menu-form-btn-text');
+    const spinner = document.getElementById('menu-form-spinner');
+    if(form && submitBtn && btnText && spinner) {
+        form.addEventListener('submit', function() {
+            submitBtn.disabled = true;
+            btnText.textContent = 'Menyimpan...';
+            spinner.classList.remove('hidden');
+        });
+    }
+});
+</script>
 @endsection

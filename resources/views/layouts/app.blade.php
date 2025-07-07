@@ -95,9 +95,20 @@
     <footer class="bg-white/90 border-t border-[#FFD6A5] text-[#FF914D] p-4 text-center mt-10 shadow-inner">
         &copy; {{ date('Y') }} <span class="font-bold">LPKIA Eatz</span>. All Rights Reserved.
     </footer>
-    <div id="toast" class="fixed top-6 right-6 z-50 hidden bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg font-semibold text-lg animate__animated"></div>
+    <div id="toast" class="fixed top-6 right-6 z-50 hidden bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg font-semibold text-lg animate__animated transition-all duration-300"></div>
     <script>
-    // Hamburger menu toggle with animation and overlay
+    // AJAX add to cart
+    function showToast(msg, color = 'bg-green-500') {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.className = `fixed top-6 right-6 z-50 ${color} text-white px-6 py-3 rounded-lg shadow-lg font-semibold text-lg animate__animated animate__fadeInDown transition-all duration-300`;
+        toast.style.display = 'block';
+        setTimeout(() => {
+            toast.classList.remove('animate__fadeInDown');
+            toast.classList.add('animate__fadeOutUp');
+            setTimeout(() => { toast.style.display = 'none'; toast.className = ''; }, 900);
+        }, 1800);
+    }
     document.addEventListener('DOMContentLoaded', function() {
         const toggle = document.getElementById('navbar-toggle');
         const menu = document.getElementById('navbar-menu');
@@ -138,6 +149,14 @@
                 e.preventDefault();
                 const action = this.action;
                 const formData = new FormData(this);
+                const btn = this.querySelector('button[type="submit"]');
+                let spinner;
+                if(btn) {
+                    spinner = document.createElement('span');
+                    spinner.className = 'ml-2 animate-spin border-2 border-white border-t-transparent rounded-full w-4 h-4 inline-block align-middle';
+                    btn.appendChild(spinner);
+                    btn.disabled = true;
+                }
                 fetch(action, {
                     method: 'POST',
                     headers: {
@@ -154,7 +173,13 @@
                         showToast(data.error, 'bg-red-500');
                     }
                 })
-                .catch(() => showToast('Gagal menambah ke keranjang', 'bg-red-500'));
+                .catch(() => showToast('Gagal menambah ke keranjang', 'bg-red-500'))
+                .finally(() => {
+                    if(btn && spinner) {
+                        btn.disabled = false;
+                        btn.removeChild(spinner);
+                    }
+                });
             });
         });
     });

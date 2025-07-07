@@ -62,7 +62,7 @@
           <tbody>
             @foreach($cart as $id => $item)
             <tr class="border-b border-[#FFD6A5]">
-              <td class="py-3 px-6"><img src="{{ $item['image'] }}" alt="Gambar {{ $item['name'] }}" class="w-16 h-16 rounded-xl object-cover" loading="lazy"></td>
+              <td class="py-3 px-6"><img src="{{ asset('storage/' . $item['image']) }}" alt="Gambar {{ $item['name'] }}" class="w-16 h-16 rounded-xl object-cover" loading="lazy"></td>
               <td class="py-3 px-6 font-semibold text-[#FF914D]">{{ $item['name'] }}</td>
               <td class="py-3 px-6 text-[#FF5E13] font-bold">Rp{{ number_format($item['price'],0,',','.') }}</td>
               <td class="py-3 px-6">
