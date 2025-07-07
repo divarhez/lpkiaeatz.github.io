@@ -111,9 +111,21 @@ class MenuController extends Controller
             'payment_method' => 'required|in:cash',
         ]);
 
-        // Simulasi menyimpan pesanan ke database (bisa dikembangkan)
-        // Simpan data pesanan, payment_method, kirim email, dll
-        // Contoh: \App\Models\Transaction::create([...])
+        // Simpan transaksi ke database
+        $transaction = \App\Models\Transaction::create([
+            'user_id' => auth()->id(),
+            'total' => collect($cart)->sum(function($item) { return $item['price'] * $item['quantity']; }),
+            'status' => 'success',
+        ]);
+        foreach ($cart as $menuId => $item) {
+            \App\Models\TransactionItem::create([
+                'transaction_id' => $transaction->id,
+                'menu_id' => $menuId,
+                'quantity' => $item['quantity'],
+                'price' => $item['price'],
+            ]);
+        }
+
 
         // Kosongkan keranjang
         session()->forget('cart');
