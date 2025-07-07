@@ -63,7 +63,7 @@
     <div class="max-w-4xl mx-auto text-center px-2 sm:px-6 relative z-10">
       <h1 class="text-2xl sm:text-5xl md:text-6xl font-extrabold text-[#FF914D] mb-2 sm:mb-4 drop-shadow-lg leading-tight">Temukan Kuliner Favoritmu di <span class="text-[#FF5E13]">LPKIA Eatz</span></h1>
       <p class="text-base sm:text-lg md:text-xl text-[#22223B] mb-4 sm:mb-8">Aneka makanan & minuman kampus, promo menarik, dan tenant pilihan. Pesan mudah, nikmati lezatnya!</p>
-      <a href="#menu" class="inline-block bg-gradient-to-r from-[#FF914D] to-[#FF5E13] text-white font-bold rounded-full px-6 sm:px-10 py-3 sm:py-4 shadow-lg hover:scale-105 hover:from-[#FF5E13] hover:to-[#FF914D] transition-all duration-300 text-base sm:text-lg">Lihat Menu</a>
+      <a href="tenants" class="inline-block bg-gradient-to-r from-[#FF914D] to-[#FF5E13] text-white font-bold rounded-full px-6 sm:px-10 py-3 sm:py-4 shadow-lg hover:scale-105 hover:from-[#FF5E13] hover:to-[#FF914D] transition-all duration-300 text-base sm:text-lg">Lihat Menu</a>
     </div>
   </section>
   <main class="max-w-6xl mx-auto px-2 sm:px-6 py-6 sm:py-12 flex-grow">

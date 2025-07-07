@@ -10,7 +10,7 @@
             </div>
         @endif
         <p class="text-base sm:text-lg text-gray-700 mb-4 sm:mb-6">Platform pemesanan makanan & minuman kampus dengan berbagai tenant dan promo menarik.</p>
-        <a href="{{ route('menu.index') }}" class="inline-block bg-gradient-to-r from-amber-500 to-orange-400 text-white font-bold rounded-full px-6 sm:px-8 py-2 sm:py-3 shadow-lg hover:scale-105 hover:from-orange-500 hover:to-amber-400 transition-all duration-300 text-base sm:text-lg">Lihat Menu</a>
+        <a href="{{ route('tenant.index') }}" class="inline-block bg-gradient-to-r from-amber-500 to-orange-400 text-white font-bold rounded-full px-6 sm:px-8 py-2 sm:py-3 shadow-lg hover:scale-105 hover:from-orange-500 hover:to-amber-400 transition-all duration-300 text-base sm:text-lg">Lihat Menu</a>
     </div>
 </div>
 @endsection
