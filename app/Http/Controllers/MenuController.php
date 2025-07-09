@@ -26,7 +26,7 @@ class MenuController extends Controller
         $keyword = $request->input('keyword');
 
         // Query 3 menu favorit: transaksi terbanyak & rating rata-rata tertinggi
-        $favoriteMenusQuery = \App\Models\Menu::select('menus.*')
+        $favoriteMenusQuery = \App\Models\Menu::with('tenant') // eager loading tenant
             ->join('transaction_items', 'menus.id', '=', 'transaction_items.menu_id')
             ->selectRaw('menus.*, COUNT(transaction_items.id) as trx_count, AVG(transaction_items.rating) as avg_rating')
             ->groupBy('menus.id', 'menus.name', 'menus.category', 'menus.description', 'menus.price', 'menus.image', 'menus.tenant_id', 'menus.created_at', 'menus.updated_at');
@@ -77,6 +77,7 @@ class MenuController extends Controller
                 $q->whereNull('expired_at')->orWhere('expired_at', '>', now());
             })
             ->get();
+        // Tidak perlu eager loading di sini karena cart dari session
         return view('cart', compact('cart', 'vouchers'));
     }
 
@@ -114,11 +115,9 @@ class MenuController extends Controller
     public function checkout(Request $request)
     {
         $cart = session()->get('cart', []);
-
         if(empty($cart)) {
             return redirect()->back()->with('error', 'Keranjang kosong, tidak bisa checkout');
         }
-
         $validated = $request->validate([
             'payment_method' => 'required|in:cash,qris',
             'voucher_code' => 'nullable|string|exists:vouchers,code',
