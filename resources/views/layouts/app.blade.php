@@ -198,5 +198,45 @@
             {{ session('error') }}
         </div>
     @endif
+    @auth
+        @if(auth()->user()->role === 'petugas')
+            <div class="relative inline-block mr-4">
+                <button id="notifBtn" class="relative focus:outline-none" aria-label="Notifikasi">
+                    <i data-feather="bell" class="w-7 h-7 text-[#FF914D]"></i>
+                    @php $unread = auth()->user()->unreadNotifications->count(); @endphp
+                    @if($unread > 0)
+                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5">{{ $unread }}</span>
+                    @endif
+                </button>
+                <div id="notifDropdown" class="hidden absolute right-0 mt-2 w-80 bg-white border border-[#FFD6A5] rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
+                    <div class="p-3 font-bold text-[#FF914D] border-b">Notifikasi Pesanan Masuk</div>
+                    @forelse(auth()->user()->unreadNotifications as $notif)
+                        <div class="px-4 py-2 border-b hover:bg-orange-50">
+                            <div class="text-sm">Pesanan baru dari user ID: <b>{{ $notif->data['user_id'] }}</b></div>
+                            <div class="text-xs text-gray-500">Total: Rp{{ number_format($notif->data['total'],0,',','.') }}</div>
+                            <div class="text-xs text-gray-400">{{ \Carbon\Carbon::parse($notif->data['created_at'])->diffForHumans() }}</div>
+                        </div>
+                    @empty
+                        <div class="px-4 py-4 text-center text-gray-400">Tidak ada notifikasi baru.</div>
+                    @endforelse
+                </div>
+            </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const btn = document.getElementById('notifBtn');
+                    const dropdown = document.getElementById('notifDropdown');
+                    if(btn && dropdown) {
+                        btn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            dropdown.classList.toggle('hidden');
+                        });
+                        document.addEventListener('click', function() {
+                            dropdown.classList.add('hidden');
+                        });
+                    }
+                });
+            </script>
+        @endif
+    @endauth
 </body>
 </html>

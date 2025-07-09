@@ -120,9 +120,12 @@ class MenuController extends Controller
         }
 
         $validated = $request->validate([
-            'payment_method' => 'required|in:cash',
+            'payment_method' => 'required|in:cash,qris',
             'voucher_code' => 'nullable|string|exists:vouchers,code',
         ]);
+
+        // Jika QRIS, status transaksi menunggu konfirmasi pembayaran
+        $status = $request->payment_method === 'qris' ? 'pending_qris' : 'success';
 
         $voucher = null;
         $discountAmount = 0;
@@ -149,7 +152,8 @@ class MenuController extends Controller
         $transaction = \App\Models\Transaction::create([
             'user_id' => auth()->id(),
             'total' => $totalAfterDiscount,
-            'status' => 'success',
+            'status' => $status,
+            'payment_method' => $request->payment_method,
         ]);
         foreach ($cart as $menuId => $item) {
             \App\Models\TransactionItem::create([
@@ -173,7 +177,7 @@ class MenuController extends Controller
         // Kosongkan keranjang
         session()->forget('cart');
 
-        return redirect()->route('menu.index')->with('success', 'Pesanan dengan pembayaran tunai berhasil diproses!' . ($voucher ? ' Voucher diterapkan.' : ''));
+        return redirect()->route('menu.index')->with('success', 'Pesanan dengan pembayaran ' . ($request->payment_method === 'qris' ? 'QRIS' : 'tunai') . ' berhasil diproses!' . ($voucher ? ' Voucher diterapkan.' : ''));
     }
 public function search(Request $request)
 {

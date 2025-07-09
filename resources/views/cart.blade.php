@@ -83,10 +83,17 @@
       </div>
       <div class="mb-6">
         <label class="block text-[#FF914D] font-semibold mb-2">Metode Pembayaran</label>
-        <select name="payment_method" class="w-full px-4 py-2 border rounded-lg" required>
+        <select name="payment_method" id="payment_method" class="w-full px-4 py-2 border rounded-lg" required>
           <option value="cash">Cash (Tunai)</option>
-          <!-- <option value="bank">Transfer Bank</option> -->
+          <option value="qris">QRIS</option>
         </select>
+      </div>
+      <div class="mb-6" id="qris-section" style="display:none;">
+        <label class="block text-[#FF914D] font-semibold mb-2">Scan QRIS untuk pembayaran</label>
+        <div class="flex flex-col items-center">
+          <img src="{{ asset('storage/qris.png') }}" alt="QRIS" class="w-48 h-48 object-contain border rounded-lg shadow mb-2">
+          <span class="text-xs text-gray-500">Silakan scan QR code di atas menggunakan aplikasi pembayaran Anda.</span>
+        </div>
       </div>
       <div class="mb-6">
         <label class="block text-[#FF914D] font-semibold mb-2">Voucher</label>
@@ -158,5 +165,22 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
+  <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          const select = document.getElementById('payment_method');
+          const qrisSection = document.getElementById('qris-section');
+          if(select && qrisSection) {
+            select.addEventListener('change', function() {
+              if(this.value === 'qris') {
+                qrisSection.style.display = '';
+              } else {
+                qrisSection.style.display = 'none';
+              }
+            });
+            // Tampilkan jika reload dan qris sudah terpilih
+            if(select.value === 'qris') qrisSection.style.display = '';
+          }
+        });
+      </script>
 </body>
 </html>
