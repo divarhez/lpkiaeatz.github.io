@@ -21,7 +21,24 @@
                         <span class="font-semibold text-[#FF914D]">Item:</span>
                         <ul class="list-disc ml-4 sm:ml-6 text-sm sm:text-base">
                             @foreach($trx->items as $item)
-                                <li>{{ $item->menu->name }} x{{ $item->quantity }}</li>
+                                <li>
+                                    {{ $item->menu->name }} x{{ $item->quantity }}
+                                    @if(is_null($item->rating))
+                                        <form action="{{ route('transaction-items.rate', $item->id) }}" method="POST" class="inline-block ml-2">
+                                            @csrf
+                                            <label for="rating-{{ $item->id }}" class="text-xs text-gray-600">Beri rating:</label>
+                                            <select name="rating" id="rating-{{ $item->id }}" class="border rounded px-1 py-0.5 text-xs">
+                                                <option value="">-</option>
+                                                @for($i=1; $i<=5; $i++)
+                                                    <option value="{{ $i }}">{{ $i }}</option>
+                                                @endfor
+                                            </select>
+                                            <button type="submit" class="bg-[#FF914D] text-white rounded px-2 py-0.5 text-xs ml-1">Kirim</button>
+                                        </form>
+                                    @else
+                                        <span class="ml-2 text-green-600 text-xs">Rating: {{ $item->rating }}</span>
+                                    @endif
+                                </li>
                             @endforeach
                         </ul>
                     </div>

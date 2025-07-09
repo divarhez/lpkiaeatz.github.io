@@ -24,17 +24,22 @@ class MenuController extends Controller
         $keyword = $request->input('keyword');
 
         // Query 3 menu favorit: transaksi terbanyak & rating rata-rata tertinggi
-        $favoriteMenus = \App\Models\Menu::select('menus.*')
+        $favoriteMenusQuery = \App\Models\Menu::select('menus.*')
             ->join('transaction_items', 'menus.id', '=', 'transaction_items.menu_id')
             ->selectRaw('menus.*, COUNT(transaction_items.id) as trx_count, AVG(transaction_items.rating) as avg_rating')
-            ->groupBy('menus.id', 'menus.name', 'menus.category', 'menus.description', 'menus.price', 'menus.image', 'menus.tenant_id', 'menus.created_at', 'menus.updated_at')
+            ->groupBy('menus.id', 'menus.name', 'menus.category', 'menus.description', 'menus.price', 'menus.image', 'menus.tenant_id', 'menus.created_at', 'menus.updated_at');
+
+        // Filter berdasarkan kategori jika ada
+        if ($category) {
+            $favoriteMenusQuery->where('menus.category', $category);
+        }
+
+        $favoriteMenus = $favoriteMenusQuery
             ->orderByDesc('trx_count')
             ->orderByDesc('avg_rating')
             ->take(3)
             ->get();
 
-        // Menu biasa (hanya tampilkan jika ingin, tapi untuk permintaan ini tidak perlu dikirim ke view utama)
-        // $menus = $query->get();
         $categories = Menu::select('category')->distinct()->pluck('category');
         $tenants = Tenant::all();
         return view('menu', compact('categories', 'tenants', 'favoriteMenus'));

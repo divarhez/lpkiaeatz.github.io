@@ -65,3 +65,6 @@ Route::middleware(['auth', 'petugas'])->get('/admin/menu-management', [MenuContr
 Route::middleware(['auth', 'petugas'])->get('/admin/menu-management/edit/{id}', [MenuController::class, 'edit'])->name('admin.menu.edit');
 Route::middleware(['auth', 'petugas'])->post('/admin/menu-management/update/{id}', [MenuController::class, 'update'])->name('admin.menu.update');
 Route::middleware(['auth', 'petugas'])->post('/admin/menu-management/delete/{id}', [MenuController::class, 'destroy'])->name('admin.menu.delete');
+
+// Route untuk memberi rating pada menu yang sudah dibeli
+Route::middleware(['auth'])->post('/transaction-items/{id}/rate', [\App\Http\Controllers\TransactionItemController::class, 'rate'])->name('transaction-items.rate');
