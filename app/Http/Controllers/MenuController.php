@@ -8,6 +8,8 @@ use App\Http\Resources\MenuResource;
 use Illuminate\Http\Request;
 use App\Models\Menu;
 use App\Models\Tenant;
+use App\Models\User;
+use App\Notifications\NewOrderNotification;
 
 class MenuController extends Controller
 {
@@ -70,7 +72,12 @@ class MenuController extends Controller
     public function showCart()
     {
         $cart = session()->get('cart', []);
-        return view('cart', compact('cart'));
+        $vouchers = \App\Models\Voucher::where('is_active', true)
+            ->where(function($q) {
+                $q->whereNull('expired_at')->orWhere('expired_at', '>', now());
+            })
+            ->get();
+        return view('cart', compact('cart', 'vouchers'));
     }
 
     public function removeFromCart($id)
@@ -114,12 +121,34 @@ class MenuController extends Controller
 
         $validated = $request->validate([
             'payment_method' => 'required|in:cash',
+            'voucher_code' => 'nullable|string|exists:vouchers,code',
         ]);
+
+        $voucher = null;
+        $discountAmount = 0;
+        if ($request->filled('voucher_code')) {
+            $voucher = \App\Models\Voucher::where('code', $request->voucher_code)
+                ->where('is_active', true)
+                ->where(function($q) {
+                    $q->whereNull('expired_at')->orWhere('expired_at', '>', now());
+                })->first();
+            if ($voucher) {
+                $total = collect($cart)->sum(function($item) { return $item['price'] * $item['quantity']; });
+                if ($voucher->type == 'percent') {
+                    $discountAmount = $total * ($voucher->discount / 100);
+                } else {
+                    $discountAmount = $voucher->discount;
+                }
+            }
+        }
+
+        $total = collect($cart)->sum(function($item) { return $item['price'] * $item['quantity']; });
+        $totalAfterDiscount = max(0, $total - $discountAmount);
 
         // Simpan transaksi ke database
         $transaction = \App\Models\Transaction::create([
             'user_id' => auth()->id(),
-            'total' => collect($cart)->sum(function($item) { return $item['price'] * $item['quantity']; }),
+            'total' => $totalAfterDiscount,
             'status' => 'success',
         ]);
         foreach ($cart as $menuId => $item) {
@@ -130,12 +159,21 @@ class MenuController extends Controller
                 'price' => $item['price'],
             ]);
         }
-
-
+        // (Opsional) Simpan info voucher ke transaksi jika ingin tracking
+        if ($voucher) {
+            $transaction->voucher_code = $voucher->code;
+            $transaction->discount = $discountAmount;
+            $transaction->save();
+        }
+        // Kirim notifikasi ke semua petugas
+        $petugas = User::where('role', 'petugas')->get();
+        foreach ($petugas as $user) {
+            $user->notify(new NewOrderNotification($transaction));
+        }
         // Kosongkan keranjang
         session()->forget('cart');
 
-        return redirect()->route('menu.index')->with('success', 'Pesanan dengan pembayaran tunai berhasil diproses!');
+        return redirect()->route('menu.index')->with('success', 'Pesanan dengan pembayaran tunai berhasil diproses!' . ($voucher ? ' Voucher diterapkan.' : ''));
     }
 public function search(Request $request)
 {

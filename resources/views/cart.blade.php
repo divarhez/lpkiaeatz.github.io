@@ -88,6 +88,23 @@
           <!-- <option value="bank">Transfer Bank</option> -->
         </select>
       </div>
+      <div class="mb-6">
+        <label class="block text-[#FF914D] font-semibold mb-2">Voucher</label>
+        <select name="voucher_code" class="w-full px-4 py-2 border rounded-lg">
+          <option value="">-- Pilih Voucher --</option>
+          @if(isset($vouchers))
+            @foreach($vouchers as $voucher)
+              <option value="{{ $voucher->code }}">{{ $voucher->code }} - {{ $voucher->description }}
+                @if($voucher->type == 'percent')
+                  ({{ $voucher->discount }}%)
+                @else
+                  (Rp{{ number_format($voucher->discount,0,',','.') }})
+                @endif
+              </option>
+            @endforeach
+          @endif
+        </select>
+      </div>
       <div class="text-right mt-8">
         <x-button class="w-full text-base sm:text-lg py-3 sm:py-4" type="submit">Checkout</x-button>
       </div>

@@ -68,3 +68,6 @@ Route::middleware(['auth', 'petugas'])->post('/admin/menu-management/delete/{id}
 
 // Route untuk memberi rating pada menu yang sudah dibeli
 Route::middleware(['auth'])->post('/transaction-items/{id}/rate', [\App\Http\Controllers\TransactionItemController::class, 'rate'])->name('transaction-items.rate');
+
+// Route untuk mengambil voucher yang tersedia (opsional, bisa untuk AJAX)
+Route::get('/vouchers/available', [\App\Http\Controllers\VoucherController::class, 'available'])->name('vouchers.available');
