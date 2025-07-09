@@ -91,7 +91,7 @@
       <div class="mb-6" id="qris-section" style="display:none;">
         <label class="block text-[#FF914D] font-semibold mb-2">Scan QRIS untuk pembayaran</label>
         <div class="flex flex-col items-center">
-          <img src="{{ asset('storage/qris.png') }}" alt="QRIS" class="w-48 h-48 object-contain border rounded-lg shadow mb-2">
+          <img src="/foto/QRIS.png" alt="QRIS" class="w-48 h-48 object-contain border rounded-lg shadow mb-2">
           <span class="text-xs text-gray-500">Silakan scan QR code di atas menggunakan aplikasi pembayaran Anda.</span>
         </div>
       </div>

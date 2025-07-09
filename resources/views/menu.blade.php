@@ -1,82 +1,24 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>LPKIA Eatz</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/feather-icons"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-  <style>
-    .line-clamp-3 {
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    ::-webkit-scrollbar {
-      width: 8px;
-      background: #f1f1f1;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 8px;
-    }
-  </style>
-</head>
-<body class="bg-gradient-to-br from-orange-50 via-white to-amber-100 min-h-screen flex flex-col font-sans text-gray-800">
+@extends('layouts.app')
 
-  <header class="bg-white/90 shadow sticky top-0 z-50 border-b border-orange-200">
-    <div class="container mx-auto flex justify-between items-center py-3 sm:py-4 px-2 sm:px-6">
-      <a href="/" class="text-2xl sm:text-3xl font-extrabold text-orange-600 tracking-wide hover:scale-105 transition-transform flex items-center gap-2">
-        <img src="https://img.icons8.com/fluency/48/restaurant-table.png" class="w-8 h-8 sm:w-10 sm:h-10" alt="Logo" />
-        LPKIA Eatz
-      </a>
-      <nav class="overflow-x-auto max-w-[60vw] sm:max-w-none">
-        <ul class="flex space-x-4 sm:space-x-6 text-orange-700 font-semibold min-w-max">
-          <li><a href="/" class="hover:text-amber-500 transition">Home</a></li>
-          <li><a href="/tenants" class="hover:text-amber-500 transition">Tenant</a></li>
-          <li><a href="#menu" class="hover:text-amber-500 transition">Menu</a></li>
-          <li><a href="#promo" class="hover:text-amber-500 transition">Promo</a></li>
-          <li>
-            <a href="{{ route('cart.show') }}" class="hover:text-amber-500 transition flex items-center gap-1">
-              <i data-feather="shopping-cart" class="w-5 h-5"></i> Keranjang
-            </a>
-          </li>
-          @auth
-            <li>
-              <form action="{{ route('logout') }}" method="POST" class="inline">
-                @csrf
-                <button type="submit" class="hover:text-red-500 transition">Logout</button>
-              </form>
-            </li>
-          @else
-            <li>
-              <a href="{{ route('login') }}" class="hover:text-blue-500 transition">Login</a>
-            </li>
-          @endauth
-        </ul>
-      </nav>
-    </div>
-  </header>
-  <section class="relative bg-gradient-to-br from-[#FFF6E9] via-[#FFF] to-[#FFE0B2] py-8 sm:py-16 overflow-hidden">
+@section('content')
+  <section class="relative bg-gradient-to-br from-[#FFF6E9] via-[#FFF] to-[#FFE0B2] py-10 sm:py-20 overflow-hidden">
     <div class="max-w-4xl mx-auto text-center px-2 sm:px-6 relative z-10">
-      <h1 class="text-2xl sm:text-5xl md:text-6xl font-extrabold text-[#FF914D] mb-2 sm:mb-4 drop-shadow-lg leading-tight">Temukan Kuliner Favoritmu di <span class="text-[#FF5E13]">LPKIA Eatz</span></h1>
-      <p class="text-base sm:text-lg md:text-xl text-[#22223B] mb-4 sm:mb-8">Aneka makanan & minuman kampus, promo menarik, dan tenant pilihan. Pesan mudah, nikmati lezatnya!</p>
-      <a href="tenants" class="inline-block bg-gradient-to-r from-[#FF914D] to-[#FF5E13] text-white font-bold rounded-full px-6 sm:px-10 py-3 sm:py-4 shadow-lg hover:scale-105 hover:from-[#FF5E13] hover:to-[#FF914D] transition-all duration-300 text-base sm:text-lg">Lihat Menu</a>
+      <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold text-[#FF914D] mb-4 sm:mb-6 drop-shadow-lg leading-tight">Temukan Kuliner Favoritmu di <span class="text-[#FF5E13]">LPKIA Eatz</span></h1>
+      <p class="text-lg sm:text-xl md:text-2xl text-[#22223B] mb-6 sm:mb-10">Aneka makanan & minuman kampus, promo menarik, dan tenant pilihan. Pesan mudah, nikmati lezatnya!</p>
+      <a href="/tenants" class="inline-block bg-gradient-to-r from-[#FF914D] to-[#FF5E13] text-white font-bold rounded-full px-8 sm:px-12 py-4 sm:py-5 shadow-lg hover:scale-105 hover:from-[#FF5E13] hover:to-[#FF914D] transition-all duration-300 text-lg sm:text-xl">Lihat Menu</a>
     </div>
   </section>
-  <main class="max-w-6xl mx-auto px-2 sm:px-6 py-6 sm:py-12 flex-grow">
+  <main class="max-w-6xl mx-auto px-2 sm:px-6 py-8 sm:py-16 flex-grow">
 
     @if (session('success'))
       <x-alert type="success">{{ session('success') }}</x-alert>
     @endif
 
-    <form action="{{ route('menu.search') }}" method="GET" class="max-w-lg mx-auto mb-10">
+    <form action="{{ route('menu.search') }}" method="GET" class="max-w-lg mx-auto mb-12">
       <div class="flex rounded-lg shadow overflow-hidden border border-[#FF914D]/30 bg-white mb-4">
         <input type="text" name="keyword" placeholder="Cari menu favoritmu..." value="{{ request('keyword') }}"
-          class="w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#FF914D] transition" />
-        <button type="submit" class="bg-[#FF914D] hover:bg-[#FF5E13] text-white px-5 py-2 font-semibold transition">
+          class="w-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#FF914D] transition text-base" />
+        <button type="submit" class="bg-[#FF914D] hover:bg-[#FF5E13] text-white px-6 py-3 font-semibold transition">
           <i data-feather="search" class="w-5 h-5"></i>
         </button>
       </div>
@@ -90,34 +32,25 @@
       </div>
     </form>
 
-    <section id="menu-favorit" class="mb-10 sm:mb-16">
-      <h2 class="text-2xl sm:text-4xl font-bold text-center text-[#FF914D] mb-6 sm:mb-10 drop-shadow">Menu Favorit</h2>
-      <div class="grid gap-6 sm:gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+    <section id="menu-favorit" class="mb-14 sm:mb-20">
+      <h2 class="text-2xl sm:text-4xl font-bold text-center text-[#FF914D] mb-8 sm:mb-12 drop-shadow">Menu Favorit</h2>
+      <div class="grid gap-8 sm:gap-12 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         @forelse($favoriteMenus as $menu)
-        <article class="relative bg-white rounded-2xl shadow-xl hover:shadow-2xl hover:-translate-y-1 hover:scale-105 transition-all duration-300 p-4 sm:p-6 flex flex-col border border-[#FFD6A5] group">
-          <span class="absolute top-2 left-2 sm:top-4 sm:left-4 bg-yellow-400 text-white text-xs font-bold px-2 sm:px-3 py-1 rounded-full shadow animate-bounce">Best Seller</span>
-          <img src="{{ asset('storage/' . $menu->image) }}" alt="Gambar {{ $menu->name }}" loading="lazy" class="rounded-xl h-28 sm:h-40 w-full object-cover mb-2 sm:mb-4 group-hover:scale-105 transition-transform duration-300" />
-          <h3 class="text-base sm:text-lg font-bold text-[#FF914D] mb-1">{{ $menu->name }}</h3>
-          <p class="text-gray-600 text-xs sm:text-sm italic mb-2 sm:mb-3 line-clamp-3">{{ $menu->description }}</p>
-          <div class="mt-auto flex items-center justify-between">
-            <span class="text-sm sm:text-base font-bold text-[#FF5E13] drop-shadow">Rp{{ number_format($menu->price, 0, ',', '.') }}</span>
-            <span class="ml-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">Rating: {{ number_format($menu->avg_rating,1) }}</span>
-          </div>
-        </article>
+          <x-menu-card :menu="$menu" />
         @empty
         <div class="col-span-3 text-center text-gray-500">Belum ada menu favorit.</div>
         @endforelse
       </div>
     </section>
 
-    <section class="mb-8 sm:mb-10">
-      <h2 class="text-xl sm:text-3xl font-bold text-center text-[#FF914D] mb-6 sm:mb-8 drop-shadow">Promo & Event Kampus</h2>
-      <div class="grid gap-4 sm:gap-8 grid-cols-1 md:grid-cols-2">
-        <div class="bg-gradient-to-r from-[#FFE0B2] to-[#FFF6E9] rounded-2xl shadow-lg p-4 sm:p-8 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 border border-[#FFD6A5]">
-          <img src="https://img.freepik.com/free-vector/food-promotion-banner-template_23-2148986842.jpg?w=400" alt="Promo" class="w-20 h-20 sm:w-28 sm:h-28 rounded-xl object-cover mb-2 sm:mb-0">
+    <section class="mb-12 sm:mb-16">
+      <h2 class="text-xl sm:text-3xl font-bold text-center text-[#FF914D] mb-8 sm:mb-10 drop-shadow">Promo & Event Kampus</h2>
+      <div class="grid gap-6 sm:gap-10 grid-cols-1 md:grid-cols-2">
+        <div class="bg-gradient-to-r from-[#FFE0B2] to-[#FFF6E9] rounded-2xl shadow-lg p-6 sm:p-10 flex flex-col sm:flex-row items-center gap-6 border border-[#FFD6A5]">
+          <img src="https://img.freepik.com/free-vector/food-promotion-banner-template_23-2148986842.jpg?w=400" alt="Promo" class="w-24 h-24 sm:w-32 sm:h-32 rounded-xl object-cover mb-2 sm:mb-0">
           <div>
-            <h3 class="text-xl font-bold text-[#FF914D] mb-1">Diskon 20% untuk Menu Spesial!</h3>
-            <p class="text-gray-700 text-sm mb-1">Dapatkan diskon spesial untuk menu tertentu selama bulan ini. Jangan lewatkan!</p>
+            <h3 class="text-xl font-bold text-[#FF914D] mb-2">Diskon 20% untuk Menu Spesial!</h3>
+            <p class="text-gray-700 text-base mb-2">Dapatkan diskon spesial untuk menu tertentu selama bulan ini. Jangan lewatkan!</p>
             <span class="inline-block bg-[#FF914D] text-white text-xs font-bold px-2 py-1 rounded-full mb-2">Berlaku s/d 31 Mei 2025</span>
             @auth
               <form action="#" method="POST" onsubmit="event.preventDefault(); alert('Promo berhasil digunakan! (simulasi)');">
@@ -129,24 +62,16 @@
             @endauth
           </div>
         </div>
-        <div class="bg-gradient-to-r from-[#FFF6E9] to-[#FFE0B2] rounded-2xl shadow-lg p-4 sm:p-8 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 border border-[#FFD6A5]">
-          <img src="https://img.freepik.com/free-vector/food-delivery-concept-illustration_114360-2747.jpg?w=400" alt="Event" class="w-20 h-20 sm:w-28 sm:h-28 rounded-xl object-cover mb-2 sm:mb-0">
+        <div class="bg-gradient-to-r from-[#FFF6E9] to-[#FFE0B2] rounded-2xl shadow-lg p-6 sm:p-10 flex flex-col sm:flex-row items-center gap-6 border border-[#FFD6A5]">
+          <img src="https://img.freepik.com/free-vector/food-delivery-concept-illustration_114360-2747.jpg?w=400" alt="Event" class="w-24 h-24 sm:w-32 sm:h-32 rounded-xl object-cover mb-2 sm:mb-0">
           <div>
-            <h3 class="text-xl font-bold text-[#FF914D] mb-1">Event: Lomba Makan Cepat!</h3>
-            <p class="text-gray-700 text-sm mb-1">Ikuti lomba makan cepat antar mahasiswa dan menangkan hadiah menarik!</p>
+            <h3 class="text-xl font-bold text-[#FF914D] mb-2">Event: Lomba Makan Cepat!</h3>
+            <p class="text-gray-700 text-base mb-2">Ikuti lomba makan cepat antar mahasiswa dan menangkan hadiah menarik!</p>
             <span class="inline-block bg-[#FF5E13] text-white text-xs font-bold px-2 py-1 rounded-full">Sabtu, 31 Mei 2025</span>
           </div>
         </div>
       </div>
     </section>
+
   </main>
-
-  <footer class="bg-white/90 border-t border-orange-200 text-orange-700 p-3 sm:p-4 text-center mt-6 sm:mt-10 shadow-inner">
-    &copy; {{ date('Y') }} <span class="font-bold">LPKIA Eatz</span>. All Rights Reserved.
-  </footer>
-
-  <script>
-    feather.replace()
-  </script>
-</body>
-</html>
+@endsection

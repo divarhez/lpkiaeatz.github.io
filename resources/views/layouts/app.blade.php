@@ -10,7 +10,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+    <meta name="description" content="LPKIA Eatz - Temukan kuliner favorit, promo, dan tenant pilihan di kampus LPKIA.">
+    <meta name="keywords" content="LPKIA, Eatz, makanan, minuman, kampus, menu, promo, tenant">
+    <meta name="author" content="LPKIA Eatz Team">
     <style>
+      /* Style kustom dipindahkan ke resources/css/custom.css */
       body { font-family: 'Montserrat', sans-serif; }
       .line-clamp-3 {
         display: -webkit-box;
@@ -30,11 +35,37 @@
 </head>
 <body class="bg-gradient-to-br from-[#FFF6E9] via-[#FFF] to-[#FFE0B2] min-h-screen flex flex-col text-[#22223B]">
     <header class="bg-white/90 shadow sticky top-0 z-50 border-b border-[#FFD6A5] w-full">
-        <div class="max-w-7xl mx-auto flex justify-between items-center py-4 px-2 sm:px-6 w-full overflow-x-auto relative">
-            <a href="/" class="text-2xl md:text-3xl font-extrabold text-[#FF914D] tracking-wide flex items-center gap-2 min-w-0">
+        <div class="max-w-7xl mx-auto flex justify-between items-center py-3 px-2 sm:px-6 w-full overflow-x-auto relative">
+            <a href="/" class="text-2xl md:text-3xl font-extrabold text-[#FF914D] tracking-wide flex items-center gap-2 min-w-0 hover:scale-105 transition-transform">
                 <img src="https://img.icons8.com/fluency/48/restaurant-table.png" class="w-10 h-10" alt="Logo" />
                 LPKIA Eatz
             </a>
+            <nav class="hidden md:flex gap-6 items-center">
+                <a href="/" class="text-[#FF914D] font-semibold hover:text-[#FF5E13] transition">Home</a>
+                <a href="/tenants" class="text-[#FF914D] font-semibold hover:text-[#FF5E13] transition">Tenant</a>
+                @auth
+                @if(auth()->user()->role === 'petugas')
+                <a href="{{ route('admin.dashboard') }}" class="text-[#FF914D] font-semibold hover:text-green-600 transition">Dashboard Admin</a>
+                @endif
+                <a href="{{ route('orders.history') }}" class="text-[#FF914D] font-semibold hover:text-amber-500 transition">Riwayat Pesanan</a>
+                @endauth
+                <a href="{{ route('cart.show') }}" class="text-[#FF914D] font-semibold hover:text-[#FF5E13] transition flex items-center gap-1">
+                    <i data-feather="shopping-cart" class="w-5 h-5"></i> Keranjang
+                </a>
+                @auth
+                <a href="{{ route('profile.show') }}" class="text-[#FF914D] font-semibold hover:text-blue-500 transition flex items-center gap-1">
+                    <i data-feather="user" class="w-5 h-5"></i> Profil
+                </a>
+                <form action="{{ route('logout') }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit" class="text-[#FF914D] font-semibold hover:text-red-500 transition">Logout</button>
+                </form>
+                @else
+                <a href="{{ route('login') }}" class="text-[#FF914D] font-semibold hover:text-blue-500 transition flex items-center gap-1">
+                    <i data-feather="user" class="w-5 h-5"></i> Profil
+                </a>
+                @endauth
+            </nav>
             <!-- Hamburger button for mobile -->
             <button id="navbar-toggle" class="md:hidden ml-2 p-2 rounded focus:outline-none focus:ring-2 focus:ring-[#FF914D] transition duration-200 hover:bg-orange-50 z-50" aria-label="Buka menu">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#FF914D]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -43,49 +74,31 @@
             </button>
             <!-- Overlay for mobile menu -->
             <div id="navbar-overlay" class="fixed inset-0 bg-black/40 z-40 hidden md:hidden transition-opacity duration-300"></div>
-            <nav class="w-full">
-                <ul id="navbar-menu" class="hidden md:flex flex-col md:flex-row text-base md:text-base font-semibold items-start md:items-center bg-white md:bg-transparent fixed md:static top-0 left-0 w-full md:w-auto h-auto md:h-auto shadow-2xl md:shadow-none z-50 p-0 md:p-0 transition-all duration-300 origin-top scale-95 md:scale-100 opacity-0 md:opacity-100 divide-y divide-orange-100 md:divide-y-0">
-                    <li class="w-full"><a href="/" class="block px-6 py-3 text-[#FF914D] hover:bg-orange-50 hover:text-[#FF5E13] transition w-full" onclick="closeMenu()">Home</a></li>
-                    <li class="w-full"><a href="/tenants" class="block px-6 py-3 text-[#FF914D] hover:bg-orange-50 hover:text-[#FF5E13] transition w-full" onclick="closeMenu()">Tenant</a></li>
-                    <li class="w-full"><a href="{{ route('menu.index') }}#menu" class="block px-6 py-3 text-[#FF914D] hover:bg-orange-50 hover:text-[#FF5E13] transition w-full" onclick="closeMenu()">Menu</a></li>
-                    <li class="w-full"><a href="#promo" class="block px-6 py-3 text-[#FF914D] hover:bg-orange-50 hover:text-[#FF5E13] transition w-full" onclick="closeMenu()">Promo</a></li>
-                    @auth
-                        <li class="w-full"><a href="{{ route('orders.history') }}" class="block px-6 py-3 text-[#FF914D] hover:bg-orange-50 hover:text-amber-500 transition w-full" onclick="closeMenu()">Riwayat Pesanan</a></li>
-                    @endauth
-                    <li class="w-full">
-                        <a href="{{ route('cart.show') }}" class="block px-6 py-3 text-[#FF914D] hover:bg-orange-50 hover:text-[#FF5E13] transition w-full flex items-center gap-1" onclick="closeMenu()">
-                            <i data-feather="shopping-cart" class="w-5 h-5"></i> Keranjang
-                        </a>
-                    </li>
-                    <li class="w-full">
-                        @auth
-                            <a href="{{ route('profile.show') }}" class="block px-6 py-3 text-[#FF914D] hover:bg-orange-50 hover:text-blue-500 transition w-full flex items-center gap-1" onclick="closeMenu()">
-                                <i data-feather="user" class="w-5 h-5"></i> Profil
-                            </a>
-                        @else
-                            <a href="{{ route('login') }}" class="block px-6 py-3 text-[#FF914D] hover:bg-orange-50 hover:text-blue-500 transition w-full flex items-center gap-1" onclick="closeMenu()">
-                                <i data-feather="user" class="w-5 h-5"></i> Profil
-                            </a>
-                        @endauth
-                    </li>
-                    @auth
-                        <li class="w-full">
-                            <form action="{{ route('logout') }}" method="POST" class="inline w-full" onclick="closeMenu()">
-                                @csrf
-                                <button type="submit" class="block px-6 py-3 text-[#FF914D] hover:bg-orange-50 hover:text-red-500 transition w-full text-left">Logout</button>
-                            </form>
-                        </li>
-                    @else
-                        <li class="w-full">
-                            <a href="{{ route('login') }}" class="block px-6 py-3 text-[#FF914D] hover:bg-orange-50 hover:text-blue-500 transition w-full" onclick="closeMenu()">Login</a>
-                        </li>
-                    @endauth
-                    @auth
-                        @if(auth()->user()->role === 'petugas')
-                            <li class="w-full"><a href="{{ route('admin.dashboard') }}" class="block px-6 py-3 text-[#FF914D] hover:bg-orange-50 hover:text-[#FF5E13] transition w-full font-bold" onclick="closeMenu()">Dashboard Admin</a></li>
-                        @endif
-                    @endauth
-                </ul>
+            <nav id="mobile-menu" class="md:hidden fixed top-0 left-0 w-3/4 max-w-xs h-full bg-white shadow-2xl z-50 p-6 transition-transform -translate-x-full">
+                <a href="/" class="block text-[#FF914D] font-semibold mb-4">Home</a>
+                <a href="/tenants" class="block text-[#FF914D] font-semibold mb-4">Tenant</a>
+                @auth
+                @if(auth()->user()->role === 'petugas')
+                <a href="{{ route('admin.dashboard') }}" class="block text-[#FF914D] font-semibold mb-4 hover:text-green-600">Dashboard Admin</a>
+                @endif
+                <a href="{{ route('orders.history') }}" class="block text-[#FF914D] font-semibold mb-4">Riwayat Pesanan</a>
+                @endauth
+                <a href="{{ route('cart.show') }}" class="block text-[#FF914D] font-semibold mb-4 flex items-center gap-1">
+                    <i data-feather="shopping-cart" class="w-5 h-5"></i> Keranjang
+                </a>
+                @auth
+                <a href="{{ route('profile.show') }}" class="block text-[#FF914D] font-semibold mb-4 flex items-center gap-1">
+                    <i data-feather="user" class="w-5 h-5"></i> Profil
+                </a>
+                <form action="{{ route('logout') }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit" class="text-[#FF914D] font-semibold hover:text-red-500 transition">Logout</button>
+                </form>
+                @else
+                <a href="{{ route('login') }}" class="block text-[#FF914D] font-semibold mb-4 flex items-center gap-1">
+                    <i data-feather="user" class="w-5 h-5"></i> Profil
+                </a>
+                @endauth
             </nav>
         </div>
     </header>
