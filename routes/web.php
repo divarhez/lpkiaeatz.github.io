@@ -71,3 +71,6 @@ Route::middleware(['auth'])->post('/transaction-items/{id}/rate', [\App\Http\Con
 
 // Route untuk mengambil voucher yang tersedia (opsional, bisa untuk AJAX)
 Route::get('/vouchers/available', [\App\Http\Controllers\VoucherController::class, 'available'])->name('vouchers.available');
+
+// Update status pesanan oleh petugas
+Route::middleware(['auth', 'petugas'])->post('/transaction/{id}/status', [\App\Http\Controllers\TransactionController::class, 'updateStatus'])->name('transaction.updateStatus');
